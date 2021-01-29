@@ -15,15 +15,15 @@ class CreateWorkersTable extends Migration
     {
         Schema::create('workers', function (Blueprint $table) {
             $table->id();
-            $table->string('Firstname');
-            $table->string('Lastname');
+            $table->string('firstname');
+            $table->string('lastname');
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('Age');
-            $table->integer('Salary');
-            $table->string('Vehicle_type');
-            $table->string('Role');
-            $table->string('Government');
+            $table->integer('age');
+            $table->integer('salary');
+            $table->string('vehicle_type');
+            $table->string('role');
+            $table->string('government');
             $table->timestamps();
         });
     }

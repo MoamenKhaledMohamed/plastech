@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
 use App\Models\Problem;
 use App\Models\Product;
 use App\Models\User;
@@ -20,7 +19,7 @@ class UserSeeder extends Seeder
         // one to many relation with Problem
     {
         User::factory()
-            ->times(10)
+            ->count(5)
             ->has(Product::factory())
             ->has(Problem::factory())
             ->create();

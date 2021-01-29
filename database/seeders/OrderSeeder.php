@@ -19,7 +19,7 @@ class OrderSeeder extends Seeder
         // one to many relation with User
         // one to many relation with Worker
         Order::factory()
-            ->times(10)
+            ->count(5)
             ->for(User::factory())
             ->for(Worker::factory())
             ->create();

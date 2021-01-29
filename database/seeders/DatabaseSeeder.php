@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\CompanyOrder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         //  \App\Models\User::factory(10)->create();
         $this->call([
-            // run all seeders when run comand (db:seed)
+            // run all seeders when run command (db:seed)
             AdminSeeder::class,
             CompanySeeder::class,
              CompanyOrderSeeder::class,

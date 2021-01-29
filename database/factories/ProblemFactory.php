@@ -19,12 +19,12 @@ class ProblemFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
 
-        'Description'=>$this->faker->sentence,
-       'Screenshot'=>$this->faker->sentence,
+        'description'=>$this->faker->sentence,
+       'screenshot'=>$this->faker->sentence,
         ];
     }
 }

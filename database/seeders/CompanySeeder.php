@@ -17,7 +17,7 @@ class CompanySeeder extends Seeder
     {
         // one to many relation with company order
         Company::factory()
-            ->times(10)
+            ->count(5)
             ->has(CompanyOrder::factory())
             ->create();
     }

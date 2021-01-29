@@ -15,9 +15,9 @@ class CreateProblemsTable extends Migration
     {
         Schema::create('problems', function (Blueprint $table) {
             $table->id();
-            $table->string('Description');
-            $table->string('Screenshot');
-            $table->integer('user_id');
+            $table->string('description');
+            $table->string('screenshot');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

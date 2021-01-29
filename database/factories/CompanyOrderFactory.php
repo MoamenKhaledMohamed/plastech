@@ -19,12 +19,12 @@ class CompanyOrderFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'Price'=>$this->faker->numberBetween(500,10000),
-            'Weight'=>$this->faker->numberBetween(1,1000),
-            'Arrival_date'=>$this->faker->dateTime,
+            'price'=>$this->faker->numberBetween(500,10000),
+            'weight'=>$this->faker->numberBetween(1,1000),
+            'arrival_date'=>$this->faker->dateTime,
         ];
     }
 }

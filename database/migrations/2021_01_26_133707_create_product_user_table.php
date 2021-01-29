@@ -17,7 +17,7 @@ class CreateProductUserTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('product_id')->constrained();
-            $table->timestamp('Date')->nullable();
+            $table->timestamp('date')->nullable();
             $table->timestamps();
         });
     }

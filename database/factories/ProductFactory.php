@@ -19,14 +19,14 @@ class ProductFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'Name'=>$this->faker->safeColorName,
-            'Price'=>$this->faker->numberBetween(100,10000),
-           'Description'=>$this->faker->sentence,
+            'name'=>$this->faker->safeColorName,
+            'price'=>$this->faker->numberBetween(100,10000),
+           'description'=>$this->faker->sentence,
            'counter'=>$this->faker->numberBetween(1,100),
-           'Image'=>$this->faker->userAgent,
+           'image'=>$this->faker->userAgent,
         ];
     }
 }

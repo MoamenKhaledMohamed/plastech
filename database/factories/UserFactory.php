@@ -20,21 +20,21 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'Firstname' => $this->faker->firstNameFemale,
-            'Lastname' => $this->faker->lastName,
+            'firstname' => $this->faker->firstNameFemale,
+            'lastname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'Date_of_birth'=>$this->faker->dateTime,
-           'Government'=>$this->faker->country,
-            'Card_id'=>$this->faker->creditCardNumber,
-            'Number_of_points'=>$this->faker->numberBetween(1000,50000),
-            'Name_on_card'=> $this->faker->firstName,
-            'Card_expiration_date'=>$this->faker->creditCardExpirationDate,
+            'date_of_birth'=>$this->faker->dateTime,
+           'government'=>$this->faker->country,
+            'card_id'=>$this->faker->creditCardNumber,
+            'number_of_points'=>$this->faker->numberBetween(1000,50000),
+            'name_on_card'=> $this->faker->firstName,
+            'card_expiration_date'=>$this->faker->creditCardExpirationDate,
         ];
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\CompanyOrder;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class CompanyOrderController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +41,10 @@ class CompanyOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param CompanyOrder $companyOrder
+     * @param User $user
      * @return Response
      */
-    public function show(CompanyOrder $companyOrder): Response
+    public function show(User $user): Response
     {
         //
     }
@@ -53,10 +52,10 @@ class CompanyOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param CompanyOrder $companyOrder
+     * @param User $user
      * @return Response
      */
-    public function edit(CompanyOrder $companyOrder): Response
+    public function edit(User $user): Response
     {
         //
     }
@@ -65,10 +64,10 @@ class CompanyOrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param CompanyOrder $companyOrder
+     * @param User $user
      * @return Response
      */
-    public function update(Request $request, CompanyOrder $companyOrder): Response
+    public function update(Request $request, User $user): Response
     {
         //
     }
@@ -76,10 +75,10 @@ class CompanyOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param CompanyOrder $companyOrder
+     * @param User $user
      * @return Response
      */
-    public function destroy(CompanyOrder $companyOrder): Response
+    public function destroy(User $user): Response
     {
         //
     }

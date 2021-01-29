@@ -19,18 +19,18 @@ class WorkerFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'Firstname' => $this->faker->firstName,
-            'Lastname' => $this->faker->lastName,
+            'firstname' => $this->faker->firstName,
+            'lastname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'Age'=>$this->faker->numberBetween(1,60),
-            'Vehicle_type'=>$this->faker->mimeType,
-            'Salary'=>$this->faker->numberBetween(1000,50000),
-            'Role'=> $this->faker->numberBetween(1,6),
-            'Government'=>$this->faker->country,
+            'age'=>$this->faker->numberBetween(1,60),
+            'vehicle_type'=>$this->faker->mimeType,
+            'salary'=>$this->faker->numberBetween(1000,50000),
+            'role'=> $this->faker->numberBetween(1,6),
+            'government'=>$this->faker->country,
         ];
     }
 }

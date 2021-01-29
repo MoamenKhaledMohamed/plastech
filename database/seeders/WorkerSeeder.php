@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
 use App\Models\Worker;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +15,7 @@ class WorkerSeeder extends Seeder
     public function run()
     {
             Worker::factory()
-            ->times(10)
+            ->times(5)
             ->create();
     }
 }

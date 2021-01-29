@@ -16,9 +16,9 @@ class CreateCompanyOrdersTable extends Migration
         Schema::create('company_orders', function (Blueprint $table) {
 
             $table->id();
-            $table->integer('Price');
-            $table->integer('Weight');
-            $table->timestamp('Arrival_date');
+            $table->integer('price');
+            $table->integer('weight');
+            $table->timestamp('arrival_date');
             $table->foreignId('company_id')->constrained();
             $table->timestamps();
         });

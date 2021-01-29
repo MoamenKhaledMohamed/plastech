@@ -17,7 +17,7 @@ class ProblemSeeder extends Seeder
     {
         // one to many relation with User
         Problem::factory()
-            ->times(10)
+            ->count(5)
             ->for(User::factory())
             ->create();
     }

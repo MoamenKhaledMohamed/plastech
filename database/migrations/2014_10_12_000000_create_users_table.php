@@ -15,17 +15,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('Firstname');
-            $table->string('Lastname');
+            $table->string('firstname');
+            $table->string('lastname');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->timestamp('Date_of_birth');
-            $table->string('Government');
-            $table->bigInteger('Card_id');
-            $table->bigInteger('Number_of_points');
-            $table->string('Name_on_card');
-            $table->timestamp('Card_expiration_date');
+            $table->timestamp('date_of_birth');
+            $table->string('government');
+            $table->bigInteger('card_id');
+            $table->bigInteger('number_of_points');
+            $table->string('name_on_card');
+            $table->timestamp('card_expiration_date');
             $table->rememberToken();
             $table->timestamps();
         });

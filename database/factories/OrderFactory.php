@@ -19,12 +19,12 @@ class OrderFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'Order_date'=>$this->faker->dateTime,
-            'Weight'=>$this->faker->numberBetween(1,1000),
-            'Point_earned'=>$this->faker->numberBetween(50,10000),
+            'order_date'=>$this->faker->dateTime,
+            'weight'=>$this->faker->numberBetween(1,1000),
+            'point_earned'=>$this->faker->numberBetween(50,10000),
         ];
     }
 }
