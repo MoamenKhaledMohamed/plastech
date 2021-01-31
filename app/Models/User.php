@@ -11,6 +11,22 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function problems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Problem::class);
+    }
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +37,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
 
     /**
      * The attributes that should be hidden for arrays.
