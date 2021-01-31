@@ -24,7 +24,7 @@ class ProblemFactory extends Factory
         return [
 
         'description'=>$this->faker->sentence,
-       'screenshot'=>$this->faker->sentence,
+       'screenshot'=>$this->faker->imageUrl($width = 640, $height = 480) ,
         ];
     }
 }
