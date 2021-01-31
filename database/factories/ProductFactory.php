@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'price'=>$this->faker->numberBetween(100,10000),
            'description'=>$this->faker->sentence,
            'counter'=>$this->faker->numberBetween(1,100),
-           'image'=>$this->faker->userAgent,
+           'image'=>$this->faker->imageUrl($width = 640, $height = 480) ,
         ];
     }
 }
