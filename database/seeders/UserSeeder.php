@@ -19,7 +19,6 @@ class UserSeeder extends Seeder
         // one to many relation with Problem
     {
         User::factory()
-            ->count(5)
             ->has(Product::factory())
             ->has(Problem::factory())
             ->create();

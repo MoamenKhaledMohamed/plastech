@@ -17,7 +17,6 @@ class ProductSeeder extends Seeder
     {
         // one to many relation with User
         Product::factory()
-            ->count(5)
             ->has(User::factory())
             ->create();
     }
