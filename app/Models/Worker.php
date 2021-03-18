@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Worker extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function order(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
