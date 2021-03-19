@@ -114,9 +114,6 @@ use App\Http\Controllers\WorkerController;
     Route::post('worker',[WorkerController::class, 'store']);
 
 
-    Route::get('worker/{id}/edit',[WorkerController::class, 'edit']);
-
-
     Route::put('worker/{id}',[WorkerController::class, 'update']);
 
 

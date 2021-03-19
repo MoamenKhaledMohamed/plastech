@@ -5,6 +5,8 @@ use App\Http\Resources\WorkerResource;
 use App\Models\Worker;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\WorkerRequest;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 
 class WorkerController extends Controller
@@ -17,7 +19,7 @@ class WorkerController extends Controller
     public function index(): JsonResponse
     {
         //retrieving workers data from database
-        $rows =Worker::all();
+        $rows = Worker::all();
         //return retrieved  workers data encoded in json
         return response()->json([
             'worker'  => WorkerResource::collection($rows),
@@ -55,29 +57,13 @@ class WorkerController extends Controller
     {
         //return worker data with its specific id in json format
 
-        $rows=Worker::find($id);
+        $row = Worker::find($id);
         return response()->json([
-            'worker' => new WorkerResource($rows),
+            'worker' => new WorkerResource($row),
         ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
-    public function edit($id): JsonResponse
-    {
-        //return worker data with its specific id in json format in a form
 
-        $rows = Worker::findOrFail($id);
-
-        return response()->json([
-            'worker' => new WorkerResource($rows),
-        ], 200);
-
-    }
 
     /**
      * Show the the result for searching on a resource.
@@ -87,27 +73,30 @@ class WorkerController extends Controller
      */
     public function search($keyword): JsonResponse
     {
+        $result = null;
         //check weather searching by (first name) keyword or by id
         if (is_numeric($keyword)) {
-            $result=Worker::findOrFail($keyword);
-            //return result of id search
-
-            return response()->json([
-                'Worker' => new WorkerResource($result)
-            ], 200);
+            $result = Worker::find($keyword);
+            //check if search result found or not
+            if ($result !== null)
+                return response()->json([
+                    'Worker' => new WorkerResource($result)
+                ], 200);
 
         } else {
-           $result=Worker::where('first_name', 'like', $keyword)->get();
-            //return result of first name search
-
-            return response()->json([
-                'Worker' => WorkerResource::collection($result)
-            ], 200);
-
+            $results = Worker::where('first_name', 'like','%'. $keyword .'%')->get();
+            if ($results->toarray() !== null)
+                //return result of id search
+                return response()->json([
+                    'Worker' => WorkerResource::collection($results)
+                ], 200);
         }
 
+        if($result === null || count($result) === 0)
+            return response()->json([
+                'Worker not found'
+            ], 404);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -148,4 +137,6 @@ class WorkerController extends Controller
 
         return response()->json([], 200);
     }
+
 }
+
