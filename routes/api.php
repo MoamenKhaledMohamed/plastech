@@ -29,11 +29,9 @@ use App\Http\Controllers\WorkerController;
     });
 
     //2#### Shop ####
-    Route::get('products',  [\App\Http\Controllers\ProductController::class, 'index']);
+    Route::get('products', [\App\Http\Controllers\ProductController::class, 'index']);
 
-    Route::get('search/{key}', function () {
-        return "hello";
-    });
+    Route::get('search/{key}', [\App\Http\Controllers\ProductController::class, 'search']);
 
     //3#### Settings #####
     Route::get('users/{id}', function () {
@@ -106,7 +104,7 @@ use App\Http\Controllers\WorkerController;
     Route::get('worker/{id}',[WorkerController::class, 'show']);
 
 
-    Route::get('worker/{id}/search', [WorkerController::class, 'search']);
+    Route::get('worker-search/{keyword}', [WorkerController::class, 'search']);
 
 
     Route::post('worker',[WorkerController::class, 'store']);

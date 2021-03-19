@@ -16,75 +16,33 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        $products = Product::all();
+        //$products = Product::all();
         return \response()->json([
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection(Product::paginate())
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
+    public function search($key): JsonResponse
     {
-        //
-    }
+        $results = [];
+        if (is_numeric($key)) {
+            $results = Product::where('price', '=', $key)->get();
+            if (count($results) !== 0)
+                return response()->json([
+                    'product' => ProductResource::collection($results)
+                ], 200);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request): Response
-    {
-        //
-    }
+        } else {
+            $results = Product::where('name', 'like','%'. $key .'%')->get();
+            if (count($results) !== 0)
+                return response()->json([
+                    'products' => ProductResource::collection($results)
+                ], 200);
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Product $product
-     * @return Response
-     */
-    public function show(Product $product): Response
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Product $product
-     * @return Response
-     */
-    public function edit(Product $product): Response
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Product $product
-     * @return Response
-     */
-    public function update(Request $request, Product $product): Response
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Product $product
-     * @return Response
-     */
-    public function destroy(Product $product): Response
-    {
-        //
+        if(count($results) === 0)
+            return response()->json([
+                'product not found'
+            ], 404);
     }
 }

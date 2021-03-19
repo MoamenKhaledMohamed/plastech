@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 use App\Http\Resources\WorkerResource;
 use App\Models\Worker;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\WorkerRequest;
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNull;
 
 
 class WorkerController extends Controller
@@ -18,15 +17,10 @@ class WorkerController extends Controller
      */
     public function index(): JsonResponse
     {
-        //retrieving workers data from database
         $rows = Worker::all();
-        //return retrieved  workers data encoded in json
         return response()->json([
             'worker'  => WorkerResource::collection($rows),
         ], 200);
-
-
-
     }
 
     /**
@@ -37,14 +31,20 @@ class WorkerController extends Controller
      */
     public function store(WorkerRequest $request): JsonResponse
     {
-        //validate worker data
         $data = $request->validated();
+        //validate worker data
+        //dd("stop here");
+
+
         //insert validated data in database
         $row = Worker::create($data);
         //return data encoded in json
         return response()->json([
             'worker' => new WorkerResource($row),
         ], 201);
+
+        //dd($request->first_name);
+        //return response()->json(['some data'], 201);
     }
 
     /**
@@ -55,8 +55,6 @@ class WorkerController extends Controller
      */
     public function show($id): JsonResponse
     {
-        //return worker data with its specific id in json format
-
         $row = Worker::find($id);
         return response()->json([
             'worker' => new WorkerResource($row),
@@ -84,11 +82,11 @@ class WorkerController extends Controller
                 ], 200);
 
         } else {
-            $results = Worker::where('first_name', 'like','%'. $keyword .'%')->get();
-            if ($results->toarray() !== null)
+            $result = Worker::where('first_name', 'like','%'. $keyword .'%')->get();
+            if (count($result) !== 0)
                 //return result of id search
                 return response()->json([
-                    'Worker' => WorkerResource::collection($results)
+                    'Worker' => WorkerResource::collection($result)
                 ], 200);
         }
 
@@ -135,7 +133,7 @@ class WorkerController extends Controller
         //delete existing worker
         Worker::destroy($id);
 
-        return response()->json([], 200);
+        return response()->json(['worker was deleted'], 200);
     }
 
 }
