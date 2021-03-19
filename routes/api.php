@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WorkerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,11 +10,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Customer
 | Worker
-| Company 
+| Company
 */
 
 // --------------------------Customer--------------------------------------
-    
+
     //1#### Authentication #####
     Route::get('sing-up', function () {
         return "hello";
@@ -69,7 +70,7 @@ use Illuminate\Support\Facades\Route;
     });
 
 // --------------------------Worker--------------------------------------
-        
+
     //1#### Authentication ####
     Route::get('sing-in-worker', function () {
         return "hello";
@@ -90,7 +91,7 @@ use Illuminate\Support\Facades\Route;
     });
 
 // --------------------------Company--------------------------------------
-        
+
     //1#### Authentication ####
     Route::get('sing-in-company', function () {
         return "hello";
@@ -101,25 +102,23 @@ use Illuminate\Support\Facades\Route;
     });
 
     //2#### Worker ####
-    Route::get('workers', function () {
-        return "hello";
-    });
+    Route::get('workers',[WorkerController::class, 'index']);
 
-    Route::get('worker/{id}', function () {
-        return "hello";
-    });
 
-    Route::post('worker', function () {
-        return "hello";
-    });
+    Route::get('worker/{id}',[WorkerController::class, 'show']);
 
-    Route::put('worker/{id}', function () {
-        return "hello";
-    });
 
-    Route::delete('worker/{id}', function () {
-        return "hello";
-    });
+    Route::get('worker/{id}/search', [WorkerController::class, 'search']);
+
+
+    Route::post('worker',[WorkerController::class, 'store']);
+
+
+    Route::put('worker/{id}',[WorkerController::class, 'update']);
+
+
+    Route::delete('worker/{id}', [WorkerController::class, 'destroy']);
+
 
     //3#### Targets ####
     Route::get('daily-target', function () {
