@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Customer
 | Worker
-| Company 
+| Company
 */
 
 // --------------------------Customer--------------------------------------
-    
+
     //1#### Authentication #####
     Route::get('sing-up', function () {
         return "hello";
@@ -28,9 +28,7 @@ use Illuminate\Support\Facades\Route;
     });
 
     //2#### Shop ####
-    Route::get('products', function () {
-        return "hello";
-    });
+    Route::get('products',  [\App\Http\Controllers\ProductController::class, 'index']);
 
     Route::get('search/{key}', function () {
         return "hello";
@@ -69,7 +67,7 @@ use Illuminate\Support\Facades\Route;
     });
 
 // --------------------------Worker--------------------------------------
-        
+
     //1#### Authentication ####
     Route::get('sing-in-worker', function () {
         return "hello";
@@ -90,7 +88,7 @@ use Illuminate\Support\Facades\Route;
     });
 
 // --------------------------Company--------------------------------------
-        
+
     //1#### Authentication ####
     Route::get('sing-in-company', function () {
         return "hello";

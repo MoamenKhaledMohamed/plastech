@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -12,9 +14,12 @@ class ProductController extends Controller
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(): JsonResponse
     {
-        //
+        $products = Product::all();
+        return \response()->json([
+            'data' => ProductResource::collection($products)
+        ], 200);
     }
 
     /**
