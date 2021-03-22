@@ -25,7 +25,7 @@ class CreateWorkersTable extends Migration
             $table->string('role');
             $table->string('government');
             $table->float("rating")->nullable();
-            $table->float("raters")->nullable();
+            $table->integer("raters")->nullable();
             $table->timestamps();
         });
     }
