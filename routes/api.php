@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\ProblemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,14 +78,10 @@ use App\Http\Controllers\WorkerController;
     });
 
     //2#### Problem ####
-    Route::get('submit-problem-from-worker', function () {
-        return "hello";
-    });
+    Route::post('submit-problem-from-worker', [ProblemController::class, 'store']);
 
     //3#### weight ####
-    Route::get('submit-weight', function () {
-        return "hello";
-    });
+    Route::post('submit-weight',[WorkerController::class, 'set_rate'] );
 
 // --------------------------Company--------------------------------------
 
