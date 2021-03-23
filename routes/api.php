@@ -53,14 +53,10 @@ use App\Http\Controllers\ProblemController;
     });
 
     //5#### Problem ####
-    Route::get('submit-problem', function () {
-        return "hello";
-    });
+    Route::post('submit-problem', [ProblemController::class, 'store']);
 
     //6#### Feedback ####
-    Route::get('submit-feedback', function () {
-        return "hello";
-    });
+    Route::post('submit-feedback', [WorkerController::class, 'set_rate']);
 
 // --------------------------Worker--------------------------------------
 
@@ -74,10 +70,14 @@ use App\Http\Controllers\ProblemController;
     });
 
     //2#### Problem ####
-    Route::post('submit-problem-from-worker', [ProblemController::class, 'store']);
+    Route::post('submit-problem-from-worker',function () {
+        return "hello";
+    } );
 
     //3#### weight ####
-    Route::post('submit-weight',[WorkerController::class, 'set_rate'] );
+    Route::post('submit-weight', function () {
+        return "hello";
+    });
 
 // --------------------------Company--------------------------------------
 

@@ -135,25 +135,23 @@ class WorkerController extends Controller
      */
     public function set_rate(RateRequest $request): JsonResponse
     {
-        //validate worker data
         $rateData = $request->validated();
+
         //note:this line should replaced with worker algorithm
         $row = Worker::find(3);
-        //returning how many user rated this worker
+
         $raters = $row->raters;
+
         //rating equation
-        $oldRate = (($row->rating)*$raters);
+        $oldRate = (($row->rating) * $raters);
+        $newRate = (($rateData['behavior'] + $rateData['time']) / 2);
+        $rate = (($oldRate + $newRate) / ($raters + 1));
 
-        $newRate = (($rateData['behavior']+$rateData['time'])/2);
-
-        $rate = (($oldRate+$newRate)/($raters+1));
-
-        //insert rating and increment raters by one
+        //insert rating and increment raters by one and return json
         $row->rating = $rate;
         $row->raters+= 1;
-        // save data
         $row->save();
-       return response()->json([
+        return response()->json([
            'Worker' => new WorkerResource($row),
         ], 201);
     }
