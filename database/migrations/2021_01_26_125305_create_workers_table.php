@@ -24,6 +24,8 @@ class CreateWorkersTable extends Migration
             $table->string('vehicle_type');
             $table->string('role');
             $table->string('government');
+            $table->float("rating")->nullable();
+            $table->integer("raters")->nullable();
             $table->timestamps();
         });
     }

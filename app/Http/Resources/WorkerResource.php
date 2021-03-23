@@ -28,6 +28,8 @@ class WorkerResource extends JsonResource
             'vehicle_type'=>$this->vehicle_type,
             'role'=>$this->role,
             'government'=>$this->government,
+            'rating'=>$this->rating,
+            'raters'=>$this->raters,
        ];
     }
 }
