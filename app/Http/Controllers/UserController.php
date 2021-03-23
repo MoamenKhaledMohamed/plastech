@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-   public function getPoints(): \Illuminate\Http\JsonResponse
+   public function get_points(): \Illuminate\Http\JsonResponse
    {
        // we must change this line later by auth
        $user = User::find(3);
@@ -20,7 +20,7 @@ class UserController extends Controller
 
    public function prize(): \Illuminate\Http\JsonResponse
    {
-        $myPoints = $this->getPoints()->original['points'];
+        $myPoints = $this->get_points()->original['points'];
 
         // my equation to convert points to money and select appropriate products
         $myMoney = (int) ($myPoints / 3);

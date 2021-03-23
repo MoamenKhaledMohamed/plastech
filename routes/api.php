@@ -44,7 +44,7 @@ use App\Http\Controllers\ProblemController;
     });
 
     //4#### Points ####
-    Route::get('points', [\App\Http\Controllers\UserController::class, 'getPoints']);
+    Route::get('points', [\App\Http\Controllers\UserController::class, 'get_points']);
 
     Route::get('prize', [\App\Http\Controllers\UserController::class, 'prize']);
 
