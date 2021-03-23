@@ -43,13 +43,9 @@ use App\Http\Controllers\WorkerController;
     });
 
     //4#### Points ####
-    Route::get('points', function () {
-        return "hello";
-    });
+    Route::get('points', [\App\Http\Controllers\UserController::class, 'getPoints']);
 
-    Route::get('prize', function () {
-        return "hello";
-    });
+    Route::get('prize', [\App\Http\Controllers\UserController::class, 'prize']);
 
     Route::get('claim', function () {
         return "hello";

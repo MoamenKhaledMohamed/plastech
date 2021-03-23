@@ -1,85 +1,37 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index(): Response
-    {
-        //
-    }
+   public function getPoints(): \Illuminate\Http\JsonResponse
+   {
+       // we must change this line later by auth
+       $user = User::find(3);
+       return response()->json([
+           'points' => $user->number_of_points,
+       ], 200);
+   }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        //
-    }
+   public function prize(): \Illuminate\Http\JsonResponse
+   {
+        $myPoints = $this->getPoints()->original['points'];
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request): Response
-    {
-        //
-    }
+        // my equation to convert points to money and select appropriate products
+        $myMoney = (int) ($myPoints / 3);
+        $products = Product::where('price', '<=', $myMoney)->get();
+        if (count($products) !== 0)
+           return response()->json([
+               'products' => ProductResource::collection($products)
+           ], 200);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function show(User $user): Response
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function edit(User $user): Response
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param User $user
-     * @return Response
-     */
-    public function update(Request $request, User $user): Response
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function destroy(User $user): Response
-    {
-        //
-    }
+        return response()->json([
+           'product not found'
+        ], 404);
+   }
 }

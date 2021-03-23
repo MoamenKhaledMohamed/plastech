@@ -32,19 +32,10 @@ class WorkerController extends Controller
     public function store(WorkerRequest $request): JsonResponse
     {
         $data = $request->validated();
-        //validate worker data
-        //dd("stop here");
-
-
-        //insert validated data in database
         $row = Worker::create($data);
-        //return data encoded in json
         return response()->json([
             'worker' => new WorkerResource($row),
         ], 201);
-
-        //dd($request->first_name);
-        //return response()->json(['some data'], 201);
     }
 
     /**
