@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\RateRequest;
+use App\Http\Requests\WeightRequest;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\WorkerResource;
+use App\Models\Order;
 use App\Models\Worker;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\WorkerRequest;
@@ -156,5 +159,26 @@ class WorkerController extends Controller
         ], 201);
     }
 
+    public function set_weight(WeightRequest $request): JsonResponse
+    {
+        /*
+         * insert row in orders'table
+         * id of client by algorithm
+         * weight by request
+         * id of worker by auth
+         * points by equation
+         * date of order by the current date
+         */
+        $data = $request->validated();
+        $data['order_date'] = date("Y-m-d h-i-s");
+        $data['point_earned'] = (int) ($data['weight'] / 3);
+        $data['user_id'] = 3;
+        $data['worker_id'] = 2;
+        $order = Order::create($data);
+
+        return response()->json([
+            'order' => new OrderResource($order),
+        ], 201);
+    }
 }
 

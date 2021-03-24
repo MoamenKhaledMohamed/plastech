@@ -75,9 +75,7 @@ use App\Http\Controllers\ProblemController;
     } );
 
     //3#### weight ####
-    Route::post('submit-weight', function () {
-        return "hello";
-    });
+    Route::post('submit-weight', [WorkerController::class, 'set_weight']);
 
 // --------------------------Company--------------------------------------
 
