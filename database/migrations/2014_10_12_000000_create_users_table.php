@@ -20,12 +20,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->timestamp('date_of_birth');
+            $table->date('date_of_birth');
             $table->string('government');
             $table->bigInteger('card_id');
-            $table->bigInteger('number_of_points');
+            $table->bigInteger('number_of_points')->nullable();
             $table->string('name_on_card');
-            $table->timestamp('card_expiration_date');
+            $table->date('card_expiration_date');
             $table->rememberToken();
             $table->timestamps();
         });
