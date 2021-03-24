@@ -1,7 +1,8 @@
 <?php
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProblemController;
 
@@ -30,23 +31,19 @@ use App\Http\Controllers\ProblemController;
     });
 
     //2#### Shop ####
-    Route::get('products', [\App\Http\Controllers\ProductController::class, 'index']);
+    Route::get('products', [ProductController::class, 'index']);
 
-    Route::get('search/{key}', [\App\Http\Controllers\ProductController::class, 'search']);
+    Route::get('search/{key}', [ProductController::class, 'search']);
 
     //3#### Settings #####
-    Route::get('users/{id}', function () {
-        return "hello";
-    });
+    Route::get('user/{id}',[UserController::class,'show']);
 
-    Route::get('save', function () {
-        return "hello";
-    });
+    Route::put('user/{id}',[UserController::class, 'update']);
 
     //4#### Points ####
-    Route::get('points', [\App\Http\Controllers\UserController::class, 'get_points']);
+    Route::get('points', [UserController::class, 'get_points']);
 
-    Route::get('prize', [\App\Http\Controllers\UserController::class, 'prize']);
+    Route::get('prize', [UserController::class, 'prize']);
 
     Route::get('claim', function () {
         return "hello";
