@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
@@ -72,7 +74,7 @@ use App\Http\Controllers\ProblemController;
     } );
 
     //3#### weight ####
-    Route::post('submit-weight', [WorkerController::class, 'set_weight']);
+    Route::post('submit-weight/{id}', [WorkerController::class, 'set_weight']);
 
 // --------------------------Company--------------------------------------
 
@@ -105,9 +107,9 @@ use App\Http\Controllers\ProblemController;
 
 
     //3#### Targets ####
-    Route::get('daily-target', function () {
-        return "hello";
-    });
+    Route::get('my-daily-target/{id}', [CompanyController::class, 'get_my_daily_target']);
+
+    Route::get('remaining-daily-target/{id}', [CompanyController::class, 'set_remaining_daily_target_by_admin']);
 
     Route::get('weekly-target', function () {
         return "hello";

@@ -6,6 +6,7 @@ use App\Http\Requests\WeightRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\WorkerResource;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Worker;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\WorkerRequest;
@@ -13,6 +14,12 @@ use App\Http\Requests\WorkerRequest;
 
 class WorkerController extends Controller
 {
+    private $companyController;
+
+    public function __construct(CompanyController $companyController)
+    {
+        $this->companyController = $companyController;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -159,26 +166,58 @@ class WorkerController extends Controller
         ], 201);
     }
 
-    public function set_weight(WeightRequest $request): JsonResponse
+    public function set_weight(WeightRequest $request, $id): JsonResponse
     {
         /*
-         * insert row in orders'table
+         * insert row in order's table
          * id of client by algorithm
          * weight by request
          * id of worker by auth
          * points by equation
          * date of order by the current date
+         * consumed_time by algorithm per minutes
          */
         $data = $request->validated();
         $data['order_date'] = date("Y-m-d h-i-s");
         $data['point_earned'] = (int) ($data['weight'] / 3);
         $data['user_id'] = 3;
-        $data['worker_id'] = 2;
+        $data['worker_id'] = $id;
+        $data['consumed_time'] = 30;
         $order = Order::create($data);
+
+        //  change in the target of worker (my_total_time, my_number_of_orders, my_weight)
+        $this->update_daily_target_of_worker($order->worker_id, $order->consumed_time, $order->weight);
+
+        // change in daily target from admin to worker (total_time, number_of_orders, weight)
+        //$this->update_daily_target_of_admin($this->companyController, $order->worker_id);
+
+        // add the new points to user's points
+        $this->update_points_of_user($order->user_id, $order->point_earned);
 
         return response()->json([
             'order' => new OrderResource($order),
         ], 201);
+    }
+
+    public function update_daily_target_of_worker($id, $consumed_time, $weight)
+    {
+        $worker = Worker::find($id);
+        $worker->my_total_time += $consumed_time;
+        $worker->my_number_of_orders += 1;
+        $worker->my_weight += $weight;
+        $worker->save();
+    }
+
+    public function update_points_of_user($id, $pointEarned)
+    {
+        $user = User::find($id);
+        $user->number_of_points += $pointEarned;
+        $user->save();
+    }
+
+    public function update_daily_target_of_admin(CompanyController $companyController, $id)
+    {
+        $companyController->set_remaining_daily_target_by_admin($id);
     }
 }
 

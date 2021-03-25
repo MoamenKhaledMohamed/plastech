@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('order_date');
             $table->bigInteger('weight');
             $table->bigInteger('point_earned');
+            $table->float('consumed_time')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('worker_id')->constrained();
             $table->timestamps();

@@ -61,9 +61,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id): JsonResponse
     {
-        //validate worker data
         $data = $request->validated();
-
         $row = User::find($id);
 
         // updating data
