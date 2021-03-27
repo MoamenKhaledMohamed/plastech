@@ -180,15 +180,15 @@ class WorkerController extends Controller
         $data = $request->validated();
         $data['order_date'] = date("Y-m-d h-i-s");
         $data['point_earned'] = (int) ($data['weight'] / 3);
-        $data['user_id'] = 3;
+        $data['user_id'] = 4;
         $data['worker_id'] = $id;
-        $data['consumed_time'] = 30;
+        $data['consumed_time'] = 300;
         $order = Order::create($data);
 
-        //  change in the target of worker (my_total_time, my_number_of_orders, my_weight)
-        $this->update_daily_target_of_worker($order->worker_id, $order->consumed_time, $order->weight);
+        //  change in the target of worker (my_weight)
+        $this->update_target_of_worker($order->worker_id, $order->weight);
 
-        // change in daily target from admin to worker (total_time, number_of_orders, weight)
+        // change in weekly target from admin to worker (weight)
         //$this->update_daily_target_of_admin($this->companyController, $order->worker_id);
 
         // add the new points to user's points
@@ -199,11 +199,9 @@ class WorkerController extends Controller
         ], 201);
     }
 
-    public function update_daily_target_of_worker($id, $consumed_time, $weight)
+    public function update_target_of_worker($id, $weight)
     {
         $worker = Worker::find($id);
-        $worker->my_total_time += $consumed_time;
-        $worker->my_number_of_orders += 1;
         $worker->my_weight += $weight;
         $worker->save();
     }
@@ -215,9 +213,9 @@ class WorkerController extends Controller
         $user->save();
     }
 
-    public function update_daily_target_of_admin(CompanyController $companyController, $id)
+    public function update_weekly_target_of_admin(CompanyController $companyController, $id)
     {
-        $companyController->set_remaining_daily_target_by_admin($id);
+        $companyController->set_remaining_weekly_target_by_admin($id);
     }
 }
 

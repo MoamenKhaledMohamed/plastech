@@ -107,9 +107,9 @@ use App\Http\Controllers\ProblemController;
 
 
     //3#### Targets ####
-    Route::get('my-daily-target/{id}', [CompanyController::class, 'get_my_daily_target']);
+    Route::get('my-weekly-target/{id}', [CompanyController::class, 'get_my_daily_target']);
 
-    Route::get('remaining-daily-target/{id}', [CompanyController::class, 'set_remaining_daily_target_by_admin']);
+    Route::get('remaining-weekly-target/{id}', [CompanyController::class, 'set_remaining_daily_target_by_admin']);
 
     Route::get('weekly-target', function () {
         return "hello";

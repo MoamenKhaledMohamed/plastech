@@ -26,12 +26,9 @@ class CreateWorkersTable extends Migration
             $table->string('government');
             $table->float("rating")->nullable();
             $table->integer("raters")->nullable();
-            $table->float("total_time")->nullable();
-            $table->float("my_total_time")->nullable();
-            $table->float("weight")->nullable();
             $table->float("my_weight")->nullable();
-            $table->integer("number_of_orders")->nullable();
-            $table->integer("my_number_of_orders")->nullable();
+            $table->date("start_at")->nullable();
+            $table->date("end_at")->nullable();
             $table->timestamps();
         });
     }
