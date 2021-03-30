@@ -3,39 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Models\Worker;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 
 class CompanyController extends Controller
 {
-    public function get_my_weekly_target($id)
+    public function get_my_weekly_target($id): JsonResponse
     {
-        /*
-         * take worker's id
-         * return  myWeight, startAt and endAt as json
-         */
+        //find worker by id
+        $worker = Worker::find($id);
+        //return data as json
+        return response()->json([
+            'weight' => $worker->my_weight,
+            'startDate' => $worker->start_at,
+            'endDate' => $worker->end_at,
+        ], 200);
+
     }
 
-   public function set_remaining_weekly_target_by_admin($id)
-   {
-       /*
-        * the purpose of this method is "updating the remaining daily target for the worker after each order"
-        * 1- take worker's id
-        * 2- call get_my_daily_target($id) to get the target of worker
-        * 3- call calculate_remaining_daily_target_by_admin(id, weight, endAt) to change on the remaining daily target for the worker
-        * 4- return the new remaining target as json
-        * Note : this method we call on it in WorkerController inside set_weight()
-        */
-   }
-
-   public function calculate_remaining_weekly_target_by_admin($id, $weight, $endAt): array
+   public function get_salary($id): JsonResponse
    {
 
-       return [];
+       $worker = Worker::find($id);
+       $currentDate = Carbon::now();
+       $endDate = $worker->end_at;
+       //check if week has passed or not by comparing between current date and end date
+       if($currentDate > $endDate){
+            //get current user weight from database
+           $currentWeight = $worker->my_weight;
+            //calculate bounce weight
+           $myBounce = (($currentWeight - 40) * 20);
+           //check if worker has completed target within week or not
+           //then save the salary in data base
+           $worker->salary = ($currentWeight >= 40) ? 2500 + $myBounce : $currentWeight * 50;
+           //reset worker target (weight,startDate,endDate) in database
+           $worker->my_weight = 0;
+           $worker->start_at = $currentDate;
+           $worker->end_at = Carbon::now()->addDays(7);
+           $worker->save();
+
+
+       }
+
+       return response()->json([
+           'startDate' => $worker->start_at,
+           'endDate' => $worker->end_at,
+           'salary' =>  $worker->salary,
+       ], 200);
    }
 
-   public function update_remaining_weekly_target_by_admin($id, $weight)
-   {
-        //you should update the new values of remaining target(weight)
-   }
 }
