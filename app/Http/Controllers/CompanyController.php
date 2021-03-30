@@ -11,9 +11,7 @@ class CompanyController extends Controller
 {
     public function get_my_weekly_target($id): JsonResponse
     {
-        //find worker by id
         $worker = Worker::find($id);
-        //return data as json
         return response()->json([
             'weight' => $worker->my_weight,
             'startDate' => $worker->start_at,
@@ -28,6 +26,7 @@ class CompanyController extends Controller
        $worker = Worker::find($id);
        $currentDate = Carbon::now();
        $endDate = $worker->end_at;
+
        //check if week has passed or not by comparing between current date and end date
        if($currentDate > $endDate){
             //get current user weight from database
@@ -42,8 +41,6 @@ class CompanyController extends Controller
            $worker->start_at = $currentDate;
            $worker->end_at = Carbon::now()->addDays(7);
            $worker->save();
-
-
        }
 
        return response()->json([

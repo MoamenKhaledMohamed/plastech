@@ -109,12 +109,5 @@ use App\Http\Controllers\ProblemController;
     //3#### Targets ####
     Route::get('my-weekly-target/{id}', [CompanyController::class, 'get_my_weekly_target']);
 
-    Route::post('remaining-weekly-target/{id}', [CompanyController::class, 'get_salary']);
+    Route::get('salary/{id}', [CompanyController::class, 'get_salary']);
 
-    Route::get('weekly-target', function () {
-        return "hello";
-    });
-
-    Route::get('total-weight', function () {
-        return "hello";
-    });

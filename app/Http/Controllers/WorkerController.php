@@ -189,7 +189,7 @@ class WorkerController extends Controller
         $this->update_target_of_worker($order->worker_id, $order->weight);
 
         // change in weekly target from admin to worker (weight)
-        //$this->update_daily_target_of_admin($this->companyController, $order->worker_id);
+        //$this->update_weekly_target_of_admin($this->companyController, $order->worker_id);
 
         // add the new points to user's points
         $this->update_points_of_user($order->user_id, $order->point_earned);
@@ -202,6 +202,7 @@ class WorkerController extends Controller
     public function update_target_of_worker($id, $weight)
     {
         $worker = Worker::find($id);
+//        $worker->my_weight = (carbon::now() > $worker->end_at) ? $weight : $worker->my_weight + $weight;
         $worker->my_weight += $weight;
         $worker->save();
     }
@@ -215,7 +216,7 @@ class WorkerController extends Controller
 
     public function update_weekly_target_of_admin(CompanyController $companyController, $id)
     {
-        $companyController->set_remaining_weekly_target_by_admin($id);
+        $companyController->get_salary($id);
     }
 }
 
