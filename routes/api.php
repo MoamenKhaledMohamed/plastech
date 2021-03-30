@@ -37,6 +37,8 @@ use App\Http\Controllers\ProblemController;
 
     Route::get('search/{key}', [ProductController::class, 'search']);
 
+    Route::get('checkout', [ProductController::class, 'checkout']);
+
     //3#### Settings #####
     Route::get('user/{id}',[UserController::class,'show']);
 

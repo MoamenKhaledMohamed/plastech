@@ -45,4 +45,9 @@ class ProductController extends Controller
                 'product not found'
             ], 404);
     }
+
+    public function checkout()
+    {
+        // steps for payment with paypal (or any thing)
+    }
 }
