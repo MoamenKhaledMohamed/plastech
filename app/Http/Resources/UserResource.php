@@ -22,11 +22,8 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'date_of_birth' => $this->date_of_birth,
-            'card_id' => $this->card_id,
             'number_of_points' => $this->number_of_points,
-            'name_on_card' => $this->name_on_card,
             'government' => $this->government,
-            'card_expiration_date' => $this->card_expiration_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -41,9 +41,39 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
+        'user-api' => [
+            'driver' => 'passport',
             'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'worker-api' => [
+            'driver' => 'passport',
+            'provider' => 'workers',
+            'hash' => false,
+        ],
+
+        'worker' => [
+            'driver' => 'session',
+            'provider' => 'workers',
+            'hash' => false,
+        ],
+
+        'admin-api' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+            'hash' => false,
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
             'hash' => false,
         ],
     ],
@@ -69,6 +99,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'workers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Worker::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [

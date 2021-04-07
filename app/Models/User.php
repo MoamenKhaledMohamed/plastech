@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -26,17 +27,17 @@ class User extends Authenticatable
         return $this->hasMany(Problem::class);
     }
 
+    public function tokens(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(OauthAccessToken::class);
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
 
     /**

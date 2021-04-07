@@ -29,6 +29,7 @@ class CreateWorkersTable extends Migration
             $table->float("my_weight")->nullable();
             $table->date("start_at")->nullable();
             $table->date("end_at")->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

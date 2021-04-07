@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Auth\WorkerAuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
@@ -20,55 +23,48 @@ use App\Http\Controllers\ProblemController;
 // --------------------------Customer--------------------------------------
 
     //1#### Authentication #####
-    Route::get('sing-up', function () {
-        return "hello";
+    Route::post('user/sing-up', [UserAuthController::class, 'register']);
+
+    Route::post('user/sing-in', [UserAuthController::class, 'login']);
+
+    Route::middleware(['auth:user-api'])->group(function () {
+        Route::post('user/logout', [UserAuthController::class, 'logout']);
+
+        //2#### Shop ####
+        Route::get('products', [ProductController::class, 'index']);
+
+        Route::get('search/{key}', [ProductController::class, 'search']);
+
+        Route::get('checkout', [ProductController::class, 'checkout']);
+
+        //3#### Settings #####
+        Route::get('user/{id}',[UserController::class,'show']);
+
+        Route::put('user/{id}',[UserController::class, 'update']);
+
+        //4#### Points ####
+        Route::get('points', [UserController::class, 'get_points']);
+
+        Route::get('prize', [UserController::class, 'prize']);
+
+        Route::get('claim', function () {
+            return "hello";
+        });
+
+        //5#### Problem ####
+        Route::post('submit-problem', [ProblemController::class, 'store']);
+
+        //6#### Feedback ####
+        Route::post('submit-feedback', [WorkerController::class, 'set_rate']);
+
     });
-
-    Route::get('sing-in', function () {
-        return "hello";
-    });
-
-    Route::get('logout', function () {
-        return "hello";
-    });
-
-    //2#### Shop ####
-    Route::get('products', [ProductController::class, 'index']);
-
-    Route::get('search/{key}', [ProductController::class, 'search']);
-
-    Route::get('checkout', [ProductController::class, 'checkout']);
-
-    //3#### Settings #####
-    Route::get('user/{id}',[UserController::class,'show']);
-
-    Route::put('user/{id}',[UserController::class, 'update']);
-
-    //4#### Points ####
-    Route::get('points', [UserController::class, 'get_points']);
-
-    Route::get('prize', [UserController::class, 'prize']);
-
-    Route::get('claim', function () {
-        return "hello";
-    });
-
-    //5#### Problem ####
-    Route::post('submit-problem', [ProblemController::class, 'store']);
-
-    //6#### Feedback ####
-    Route::post('submit-feedback', [WorkerController::class, 'set_rate']);
 
 // --------------------------Worker--------------------------------------
 
     //1#### Authentication ####
-    Route::get('sing-in-worker', function () {
-        return "hello";
-    });
+    Route::get('worker/sing-in', [WorkerAuthController::class, 'login']);
 
-    Route::get('logout-worker', function () {
-        return "hello";
-    });
+    Route::get('worker/logout', [WorkerAuthController::class, 'logout']);
 
     //2#### Problem ####
     Route::post('submit-problem-from-worker',function () {
@@ -81,13 +77,9 @@ use App\Http\Controllers\ProblemController;
 // --------------------------Company--------------------------------------
 
     //1#### Authentication ####
-    Route::get('sing-in-company', function () {
-        return "hello";
-    });
+    Route::get('admin/sing-in', [AdminAuthController::class, 'login']);
 
-    Route::get('logout-company', function () {
-        return "hello";
-    });
+    Route::get('admin/logout', [AdminAuthController::class, 'logout']);
 
     //2#### Worker ####
     Route::get('workers',[WorkerController::class, 'index']);

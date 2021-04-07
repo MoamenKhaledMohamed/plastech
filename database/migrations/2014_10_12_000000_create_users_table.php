@@ -22,10 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->date('date_of_birth');
             $table->string('government');
-            $table->bigInteger('card_id');
             $table->bigInteger('number_of_points')->nullable();
-            $table->string('name_on_card');
-            $table->date('card_expiration_date');
             $table->rememberToken();
             $table->timestamps();
         });

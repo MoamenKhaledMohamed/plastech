@@ -42,6 +42,7 @@ class WorkerController extends Controller
     public function store(WorkerRequest $request): JsonResponse
     {
         $data = $request->validated();
+        $data['password'] = bcrypt($data['password']);
         $row = Worker::create($data);
         return response()->json([
             'worker' => new WorkerResource($row),
@@ -115,7 +116,9 @@ class WorkerController extends Controller
         foreach ($data as $key => $value) {
             $row->$key = $value;
         }
-        // save data
+
+        // encode password and save data
+        $row['password'] = bcrypt($row['password']);
         $row->save();
         return response()->json([
             'Worker' => new WorkerResource($row)

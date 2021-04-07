@@ -31,10 +31,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'date_of_birth'=>$this->faker->dateTime,
            'government'=>$this->faker->country,
-            'card_id'=>$this->faker->creditCardNumber,
             'number_of_points'=>$this->faker->numberBetween(1000,50000),
-            'name_on_card'=> $this->faker->firstName,
-            'card_expiration_date'=>$this->faker->creditCardExpirationDate,
         ];
     }
 }
