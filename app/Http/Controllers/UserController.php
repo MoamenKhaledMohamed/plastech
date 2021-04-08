@@ -12,18 +12,11 @@ use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-   public function get_points(): JsonResponse
-   {
-       // we must change this line later by auth
-       $user = User::find(3);
-       return response()->json([
-           'points' => $user->number_of_points,
-       ], 200);
-   }
 
    public function prize(): JsonResponse
    {
-        $myPoints = $this->get_points()->original['points'];
+       $user = auth('user-api')->user();
+       $myPoints = $user->number_of_points;
 
         // my equation to convert points to money and select appropriate products
         $myMoney = (int) ($myPoints / 3);
@@ -39,39 +32,28 @@ class UserController extends Controller
    }
 
     /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
-    public function show($id): JsonResponse
-    {
-        $row = User::find($id);
-        return response()->json([
-            'user' => new UserResource($row),
-        ], 200);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param UserRequest $request
      * @param $id
      * @return JsonResponse
      */
-    public function update(UserRequest $request, $id): JsonResponse
+    public function update(UserRequest $request): JsonResponse
     {
-        $data = $request->validated();
-        $row = User::find($id);
+        $updatedUser = $request->validated();
+        $user = auth('user-api')->user();
 
         // updating data
-        foreach ($data as $key => $value) {
-            $row->$key = $value;
+        foreach ($updatedUser as $key => $value) {
+            $user->$key = $value;
         }
-        // save data
-        $row->save();
+
+        // encode password and save data
+        $user['password'] = bcrypt($user['password']);
+        $user->save();
+
         return response()->json([
-            'user' => new UserResource($row)
+            'user' => new UserResource($user)
         ], 201);
 
     }

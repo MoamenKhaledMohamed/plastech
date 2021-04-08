@@ -38,13 +38,9 @@ use App\Http\Controllers\ProblemController;
         Route::get('checkout', [ProductController::class, 'checkout']);
 
         //3#### Settings #####
-        Route::get('user/{id}',[UserController::class,'show']);
-
-        Route::put('user/{id}',[UserController::class, 'update']);
+        Route::put('user',[UserController::class, 'update']); // if you sent the same email not accept
 
         //4#### Points ####
-        Route::get('points', [UserController::class, 'get_points']);
-
         Route::get('prize', [UserController::class, 'prize']);
 
         Route::get('claim', function () {
