@@ -27,11 +27,6 @@ class User extends Authenticatable
         return $this->hasMany(Problem::class);
     }
 
-    public function tokens(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(OauthAccessToken::class);
-    }
-
     /**
      * The attributes that are mass assignable.
      *

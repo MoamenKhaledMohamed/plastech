@@ -151,25 +151,26 @@ class WorkerController extends Controller
         $rateData = $request->validated();
 
         //note:this line should replaced with worker algorithm
-        $row = Worker::find(3);
+        $worker = Worker::find(3);
 
-        $raters = $row->raters;
+        $raters = $worker->raters;
 
         //rating equation
-        $oldRate = (($row->rating) * $raters);
+        $oldRate = (($worker->rating) * $raters);
         $newRate = (($rateData['behavior'] + $rateData['time']) / 2);
         $rate = (($oldRate + $newRate) / ($raters + 1));
 
         //insert rating and increment raters by one and return json
-        $row->rating = $rate;
-        $row->raters+= 1;
-        $row->save();
+        $worker->rating = $rate;
+        $worker->raters+= 1;
+        $worker->save();
+
         return response()->json([
-           'Worker' => new WorkerResource($row),
-        ], 201);
+           'status' => 'success',
+        ], 200);
     }
 
-    public function set_weight(WeightRequest $request, $id): JsonResponse
+    public function set_weight(WeightRequest $request): JsonResponse
     {
         /*
          * insert row in order's table
@@ -180,11 +181,13 @@ class WorkerController extends Controller
          * date of order by the current date
          * consumed_time by algorithm per minutes
          */
+        $worker = auth('worker-api')->user();
+
         $data = $request->validated();
         $data['order_date'] = date("Y-m-d h-i-s");
         $data['point_earned'] = (int) ($data['weight'] / 3);
         $data['user_id'] = 4;
-        $data['worker_id'] = $id;
+        $data['worker_id'] = $worker->id;
         $data['consumed_time'] = 300;
         $order = Order::create($data);
 

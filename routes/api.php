@@ -19,7 +19,7 @@ use App\Http\Controllers\ProblemController;
 | Worker
 | Company
 */
-
+// Note: MUST user_id, worker_id and admin_id be Different Otherwise Auth will be wrong (logout problem)
 // --------------------------Customer--------------------------------------
 
     //1#### Authentication #####
@@ -27,7 +27,8 @@ use App\Http\Controllers\ProblemController;
 
     Route::post('user/sing-in', [UserAuthController::class, 'login']);
 
-    Route::middleware(['auth:user-api'])->group(function () {
+    Route::middleware(['auth:user-api'])->group(function ()
+    {
         Route::post('user/logout', [UserAuthController::class, 'logout']);
 
         //2#### Shop ####
@@ -51,53 +52,58 @@ use App\Http\Controllers\ProblemController;
         Route::post('submit-problem', [ProblemController::class, 'store']);
 
         //6#### Feedback ####
-        Route::post('submit-feedback', [WorkerController::class, 'set_rate']);
+        Route::post('submit-feedback', [WorkerController::class, 'set_rate']); // no relation between user and worker(user rates a worker)
 
     });
 
 // --------------------------Worker--------------------------------------
 
     //1#### Authentication ####
-    Route::get('worker/sing-in', [WorkerAuthController::class, 'login']);
+    Route::post('worker/sing-in', [WorkerAuthController::class, 'login']);
 
-    Route::get('worker/logout', [WorkerAuthController::class, 'logout']);
+    Route::middleware(['auth:worker-api'])->group(function ()
+    {
+        Route::post('worker/logout', [WorkerAuthController::class, 'logout']);
 
-    //2#### Problem ####
-    Route::post('submit-problem-from-worker',function () {
-        return "hello";
-    } );
+        //2#### Problem ####
+        Route::post('worker/problem', function () {
+            return "hello";
+        });
 
-    //3#### weight ####
-    Route::post('submit-weight/{id}', [WorkerController::class, 'set_weight']);
-
+        //3#### weight ####
+        Route::post('worker/submit-weight', [WorkerController::class, 'set_weight']);
+    });
 // --------------------------Company--------------------------------------
 
     //1#### Authentication ####
-    Route::get('admin/sing-in', [AdminAuthController::class, 'login']);
+    Route::post('admin/sing-in', [AdminAuthController::class, 'login']);
 
-    Route::get('admin/logout', [AdminAuthController::class, 'logout']);
+    Route::middleware(['auth:admin-api'])->group(function ()
+    {
+        Route::post('admin/logout', [AdminAuthController::class, 'logout']);
 
-    //2#### Worker ####
-    Route::get('workers',[WorkerController::class, 'index']);
-
-
-    Route::get('worker/{id}',[WorkerController::class, 'show']);
-
-
-    Route::get('worker-search/{keyword}', [WorkerController::class, 'search']);
+        //2#### Worker ####
+        Route::get('workers', [WorkerController::class, 'index']);
 
 
-    Route::post('worker',[WorkerController::class, 'store']);
+        Route::get('worker/{id}', [WorkerController::class, 'show']);
 
 
-    Route::put('worker/{id}',[WorkerController::class, 'update']);
+        Route::get('worker-search/{keyword}', [WorkerController::class, 'search']);
 
 
-    Route::delete('worker/{id}', [WorkerController::class, 'destroy']);
+        Route::post('worker', [WorkerController::class, 'store']);
 
 
-    //3#### Targets ####
-    Route::get('my-weekly-target/{id}', [CompanyController::class, 'get_my_weekly_target']);
+        Route::put('worker/{id}', [WorkerController::class, 'update']);
 
-    Route::get('salary/{id}', [CompanyController::class, 'get_salary']);
+
+        Route::delete('worker/{id}', [WorkerController::class, 'destroy']);
+
+
+        //3#### Targets ####
+        Route::get('my-weekly-target/{id}', [CompanyController::class, 'get_my_weekly_target']);
+
+        Route::get('salary/{id}', [CompanyController::class, 'get_salary']);
+    });
 

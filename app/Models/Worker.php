@@ -27,4 +27,5 @@ class Worker extends Authenticatable
     {
         return $this->hasOne(Order::class);
     }
+
 }

@@ -48,6 +48,7 @@ class UserAuthController extends Controller
         // get the authenticated user from helper method auth() Note:: here we used guard passport
         $user = auth('user-api')->user();
         $user->tokens()->delete();
+
         return response()->json([
             'user' => 'logout'
         ], 200);
