@@ -54,6 +54,8 @@ use App\Http\Controllers\ProblemController;
         //6#### Feedback ####
         Route::post('submit-feedback', [WorkerController::class, 'set_rate']); // no relation between user and worker(user rates a worker)
 
+        //7#### MyLocation####
+        Route::post('my-location', [UserController::class, 'get_my_location']);
     });
 
 // --------------------------Worker--------------------------------------
@@ -72,6 +74,9 @@ use App\Http\Controllers\ProblemController;
 
         //3#### weight ####
         Route::post('worker/submit-weight', [WorkerController::class, 'set_weight']);
+
+        //4#### MyLocation####
+        Route::post('my-location', [WorkerController::class, 'get_my_location']);
     });
 // --------------------------Company--------------------------------------
 
