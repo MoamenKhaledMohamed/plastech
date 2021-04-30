@@ -27,6 +27,8 @@ class CreateWorkersTable extends Migration
             $table->float("rating")->nullable();
             $table->integer("raters")->nullable();
             $table->float("my_weight")->nullable();
+            $table->float("latitude")->nullable();
+            $table->float("longitude")->nullable();
             $table->date("start_at")->nullable();
             $table->date("end_at")->nullable();
             $table->rememberToken();

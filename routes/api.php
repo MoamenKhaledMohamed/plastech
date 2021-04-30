@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Auth\WorkerAuthController;
+use App\Http\Controllers\MapController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
@@ -55,7 +56,7 @@ use App\Http\Controllers\ProblemController;
         Route::post('submit-feedback', [WorkerController::class, 'set_rate']); // no relation between user and worker(user rates a worker)
 
         //7#### MyLocation####
-        Route::post('my-location', [UserController::class, 'get_my_location']);
+        Route::post('my-order', [MapController::class, 'get_order']);
     });
 
 // --------------------------Worker--------------------------------------
