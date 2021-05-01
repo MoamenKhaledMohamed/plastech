@@ -77,7 +77,7 @@ use App\Http\Controllers\ProblemController;
         Route::post('worker/submit-weight', [WorkerController::class, 'set_weight']);
 
         //4#### MyLocation####
-        Route::post('my-location', [WorkerController::class, 'get_my_location']);
+        Route::post('my-location', [MapController::class, 'change_my_status']);
     });
 // --------------------------Company--------------------------------------
 

@@ -29,6 +29,8 @@ class CreateWorkersTable extends Migration
             $table->float("my_weight")->nullable();
             $table->float("latitude")->nullable();
             $table->float("longitude")->nullable();
+            $table->boolean("status")->default(true);
+            $table->date("time_changing_status")->nullable();
             $table->date("start_at")->nullable();
             $table->date("end_at")->nullable();
             $table->rememberToken();
