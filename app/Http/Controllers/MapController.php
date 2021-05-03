@@ -41,11 +41,12 @@ class MapController extends Controller
     }
 
     // Worker Part
-
     public function change_my_status(float $latitude, float $longitude, bool $status)
     {
        // validation
-        // insert to data base a new status and his location.
-        // create another api to check the order's table by date of changing with date of order and is_End and his id
+        // check if status on
+            // insert the new location and his my status
+        // if not
+            // insert my status only or you can insert the last location of worker before made status off
     }
 }

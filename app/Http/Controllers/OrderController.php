@@ -19,16 +19,6 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -46,17 +36,6 @@ class OrderController extends Controller
      * @return Response
      */
     public function show(Order $order): Response
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Order $order
-     * @return Response
-     */
-    public function edit(Order $order): Response
     {
         //
     }
@@ -82,5 +61,16 @@ class OrderController extends Controller
     public function destroy(Order $order): Response
     {
         //
+    }
+
+    public function search_for_my_order(float $latitude, float $longitude)
+    {
+        // validation
+        // search in order's table for an order by id of worker
+        // by using $worker = auth('worker-api')->user() to get worker's data
+        // if we found orders check on the  number of orders and return the oldest or as you like
+            // return to worker the data of order and user's data.
+        // if not
+            // return nothing
     }
 }

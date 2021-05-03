@@ -190,6 +190,8 @@ class WorkerController extends Controller
         $data['worker_id'] = $worker->id;
         $data['consumed_time'] = 300;
         $order = Order::create($data);
+        // copy the order to Ended_orders table
+        // delete this row from order's table.
 
         //  change in the target of worker (my_weight)
         $this->update_target_of_worker($order->worker_id, $order->weight);

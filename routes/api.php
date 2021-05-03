@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Auth\WorkerAuthController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
@@ -76,8 +77,10 @@ use App\Http\Controllers\ProblemController;
         //3#### weight ####
         Route::post('worker/submit-weight', [WorkerController::class, 'set_weight']);
 
-        //4#### MyLocation####
-        Route::post('my-location', [MapController::class, 'change_my_status']);
+        //4#### MyOrder####
+        Route::post('my-status', [MapController::class, 'change_my_status']);
+
+        Route::post('my-order', [OrderController::class, 'search_for_my_order']);
     });
 // --------------------------Company--------------------------------------
 
