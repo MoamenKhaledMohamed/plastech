@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 class MapController extends Controller
 {
     // User Part
@@ -41,10 +43,22 @@ class MapController extends Controller
     }
 
     // Worker Part
-    public function change_my_status(float $latitude, float $longitude, bool $status)
+
+    /**
+     * @throws ValidationException
+     */
+    public function change_my_status(Request $request)
     {
-       // validation
-        // check if status on
+        $validator = Validator::make($request->all(), [
+            'latitude' => 'required'|'integer',
+            'longitude' => 'required'|'integer',
+            'status' => 'required',
+        ]);
+
+        if($validator){
+            dd($validator['status']);
+        }
+        else{echo "off";}
             // insert the new location and his my status
         // if not
             // insert my status only or you can insert the last location of worker before made status off
