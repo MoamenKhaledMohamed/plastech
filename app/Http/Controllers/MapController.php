@@ -1,11 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use App\Http\Requests\LocationRequest as LocationRequest;
+use App\Http\Controllers\OrderController as OrderController;
 class MapController extends Controller
 {
     // User Part
@@ -26,7 +23,7 @@ class MapController extends Controller
         return response()->json([]);
     }
 
-    public function get_available_workers(int $latitude,int $longitude): array
+    public function get_available_workers(int $latitude, int $longitude): array
     {
         // return array of workers by equation.
         return [];
@@ -45,22 +42,37 @@ class MapController extends Controller
     // Worker Part
 
     /**
-     * @throws ValidationException
      */
-    public function change_my_status(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'latitude' => 'required'|'integer',
-            'longitude' => 'required'|'integer',
-            'status' => 'required',
-        ]);
 
-        if($validator){
-            dd($validator['status']);
-        }
-        else{echo "off";}
-            // insert the new location and his my status
-        // if not
-            // insert my status only or you can insert the last location of worker before made status off
+    public function change_my_location (LocationRequest $request){
+        $request->validated();
+        $worker = auth('worker-api')->user();
+        $worker->latitude = $request['latitude'];
+        $worker->longitude = $request['longitude'];
+        $worker->status = $request['status'];
+        $worker->save();
     }
+
+
+    public function change_my_status(LocationRequest $request)
+    {
+        $location = $request->validated();
+        $worker = auth('worker-api')->user();
+
+        if ($location['status'] == 1) {
+            $this->change_my_location($request);
+           return((new OrderController)->search_for_my_order($request));
+        }
+
+        else {
+            $worker->status = $request['status'];
+            $worker->save();
+
+           return response()->json([
+                'status' => $worker->status
+            ], 200);
+        }
+
+    }
+
 }
