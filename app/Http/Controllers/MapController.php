@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\LocationRequest as LocationRequest;
 use App\Http\Controllers\OrderController as OrderController;
+use Illuminate\Http\JsonResponse;
+
 class MapController extends Controller
 {
+    private $mapController;
     // User Part
-    public function get_order(float $latitude, float $longitude): \Illuminate\Http\JsonResponse
+
+
+    public function get_order(float $latitude, float $longitude): JsonResponse
     {
         // validation.
 
@@ -54,20 +59,25 @@ class MapController extends Controller
     }
 
 
-    public function change_my_status(LocationRequest $request)
+    public function change_my_status(LocationRequest $request): JsonResponse
     {
+
         $location = $request->validated();
         $worker = auth('worker-api')->user();
-
         if ($location['status'] == 1) {
             $this->change_my_location($request);
-           return((new OrderController)->search_for_my_order($request));
+
+            return response()->json([
+                'latitude' => $worker->latitude,
+                'longitude' => $worker->longitude,
+                'status' => $worker->status,
+            ], 200);
+
         }
 
         else {
             $worker->status = $request['status'];
             $worker->save();
-
            return response()->json([
                 'status' => $worker->status
             ], 200);

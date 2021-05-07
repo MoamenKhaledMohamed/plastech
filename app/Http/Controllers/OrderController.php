@@ -68,10 +68,10 @@ class OrderController extends Controller
         //
     }
 
-    public function search_for_my_order(LocationRequest $request): JsonResponse
+    public function search_for_my_order(LocationRequest $request,MapController $mapController): JsonResponse
     {
         $worker = auth('worker-api')->user();
-        (new MapController)->change_my_location($request);
+        $mapController->change_my_location($request);
         $result = Order::where('worker_id', 'like', $worker->id)->get();
         if(count($result) !== 0){
 
