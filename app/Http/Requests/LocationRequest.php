@@ -27,7 +27,7 @@ class LocationRequest extends FormRequest
         return [
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'status' => 'required|integer|between:0,1',
+            'status' => 'required|boolean',
             ];
 
     }

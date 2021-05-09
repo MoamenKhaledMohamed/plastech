@@ -50,6 +50,7 @@ class MapController extends Controller
      */
 
     public function change_my_location (LocationRequest $request){
+        //check validate and then store longitude, latitude and status of current worker
         $request->validated();
         $worker = auth('worker-api')->user();
         $worker->latitude = $request['latitude'];
@@ -61,10 +62,13 @@ class MapController extends Controller
 
     public function change_my_status(LocationRequest $request): JsonResponse
     {
-
+        //check validate
         $location = $request->validated();
+        //get authenticated worker
         $worker = auth('worker-api')->user();
-        if ($location['status'] == 1) {
+        //check weather worker is open for work on not then return response in json
+        if ($location['status']) {
+            //call methode to store his location in database
             $this->change_my_location($request);
 
             return response()->json([
