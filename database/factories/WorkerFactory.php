@@ -31,6 +31,8 @@ class WorkerFactory extends Factory
             'salary'=>$this->faker->numberBetween(1000,50000),
             'role'=> $this->faker->numberBetween(1,6),
             'government'=>$this->faker->country,
+            'latitude' => $this->faker->numberBetween(0,180),
+            'longitude' => $this->faker->numberBetween(0,360),
         ];
     }
 }

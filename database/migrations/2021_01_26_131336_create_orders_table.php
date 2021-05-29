@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->float('consumed_time')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('worker_id')->constrained();
+            $table->boolean('is_ended')->default(false);
             $table->timestamps();
         });
     }
