@@ -26,7 +26,7 @@ class MapController extends Controller
         // insert in order's table
         $this->create_order();
 
-        // return all info and worker's data to user as json.
+        // return worker's data to user as json.
         return response()->json([]);
     }
 
