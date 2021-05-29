@@ -1,13 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\LocationRequest as LocationRequest;
+use App\Http\Controllers\OrderController as OrderController;
+use Illuminate\Http\JsonResponse;
 
 class MapController extends Controller
 {
+    private $mapController;
     // User Part
-    public function get_order(float $latitude, float $longitude): \Illuminate\Http\JsonResponse
+
+
+    public function get_order(float $latitude, float $longitude): JsonResponse
     {
         // validation.
 
@@ -24,7 +28,7 @@ class MapController extends Controller
         return response()->json([]);
     }
 
-    public function get_available_workers(int $latitude,int $longitude): array
+    public function get_available_workers(int $latitude, int $longitude): array
     {
         // return array of workers by equation.
         return [];
@@ -41,12 +45,48 @@ class MapController extends Controller
     }
 
     // Worker Part
-    public function change_my_status(float $latitude, float $longitude, bool $status)
-    {
-       // validation
-        // check if status on
-            // insert the new location and his my status
-        // if not
-            // insert my status only or you can insert the last location of worker before made status off
+
+    /**
+     */
+
+    public function change_my_location (LocationRequest $request){
+        //check validate and then store longitude, latitude and status of current worker
+        $request->validated();
+        $worker = auth('worker-api')->user();
+        $worker->latitude = $request['latitude'];
+        $worker->longitude = $request['longitude'];
+        $worker->status = $request['status'];
+        $worker->save();
     }
+
+
+    public function change_my_status(LocationRequest $request): JsonResponse
+    {
+        //check validate
+        $location = $request->validated();
+        //get authenticated worker
+        $worker = auth('worker-api')->user();
+        //check weather worker is open for work on not then return response in json
+        if ($location['status']) {
+            //call methode to store his location in database
+            $this->change_my_location($request);
+
+            return response()->json([
+                'latitude' => $worker->latitude,
+                'longitude' => $worker->longitude,
+                'status' => $worker->status,
+            ], 200);
+
+        }
+
+        else {
+            $worker->status = $request['status'];
+            $worker->save();
+           return response()->json([
+                'status' => $worker->status
+            ], 200);
+        }
+
+    }
+
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class LocationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,11 +21,14 @@ class LoginRequest extends FormRequest
      *
      * @return array
      */
+
     public function rules(): array
     {
         return [
-            'email' => 'required',
-            'password' => 'required| min:6|regex:"^([a-zA-Z0-9@*#]{8,15})"',
-        ];
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'status' => 'required|boolean',
+            ];
+
     }
 }

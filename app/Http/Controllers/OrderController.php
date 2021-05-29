@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
+
 use App\Models\Order;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\LocationRequest as LocationRequest;
+use function PHPUnit\Framework\isEmpty;
 
 class OrderController extends Controller
 {
@@ -63,14 +68,26 @@ class OrderController extends Controller
         //
     }
 
-    public function search_for_my_order(float $latitude, float $longitude)
+    public function search_for_my_order(LocationRequest $request,MapController $mapController): JsonResponse
     {
-        // validation
-        // search in order's table for an order by id of worker
-        // by using $worker = auth('worker-api')->user() to get worker's data
-        // if we found orders check on the  number of orders and return the oldest or as you like
-            // return to worker the data of order and user's data.
-        // if not
-            // return nothing
+        //get authenticated worker
+        $worker = auth('worker-api')->user();
+        //call methode to store his location in database
+        $mapController->change_my_location($request);
+        //check if there is any order from client and return the result in json
+        $result = Order::where('worker_id','=', $worker->id)->get();
+        if(count($result) !== 0){
+
+           return response()->json([
+                'Order' => OrderResource::collection($result)
+            ], 200);
+        }
+        else{ return response()->json([
+            'Order' => 'No current orders yet'
+        ], 200);}
+
+
     }
+
+
 }
