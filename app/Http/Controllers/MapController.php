@@ -13,35 +13,39 @@ class MapController extends Controller
 
     public function get_order(float $latitude, float $longitude): JsonResponse
     {
-        // validation.
+        // validation latitude and longitude.
+
+        // insert latitude and longitude in user's table.
 
         // return available locations of workers. search in table and check on status of worker.
         $availableWorkers = $this->get_available_workers($latitude, $longitude);
 
         // return the nearest worker.
-        $worker = $this->get_the_nearest_worker($availableWorkers);
+        $worker = $this->get_the_nearest_worker($availableWorkers, $latitude, $longitude);
 
-        // insert in order's table then return all info(worker's place, time) between this worker and this user.
-        $info_of_route = $this->get_info_of_route();
+        // insert in order's table
+        $this->create_order();
 
         // return all info and worker's data to user as json.
         return response()->json([]);
     }
 
-    public function get_available_workers(int $latitude, int $longitude): array
+    public function get_available_workers(float $latitude, float $longitude): array
     {
-        // return array of workers by equation.
+        // return array of workers by query.
         return [];
     }
 
-    public function get_the_nearest_worker($availableWorkers)
+    public function get_the_nearest_worker($availableWorkers, float $latitude, float $longitude)
     {
         // compare locations of available workers to location of user then return this worker.
+        // use distance matrix.
+       return '';
     }
 
-    public function get_info_of_route()
+    public function create_order()
     {
-        // by using api from google map.
+        // create order in order's table.
     }
 
     // Worker Part
@@ -57,36 +61,6 @@ class MapController extends Controller
         $worker->longitude = $request['longitude'];
         $worker->status = $request['status'];
         $worker->save();
-    }
-
-
-    public function change_my_status(LocationRequest $request): JsonResponse
-    {
-        //check validate
-        $location = $request->validated();
-        //get authenticated worker
-        $worker = auth('worker-api')->user();
-        //check weather worker is open for work on not then return response in json
-        if ($location['status']) {
-            //call methode to store his location in database
-            $this->change_my_location($request);
-
-            return response()->json([
-                'latitude' => $worker->latitude,
-                'longitude' => $worker->longitude,
-                'status' => $worker->status,
-            ], 200);
-
-        }
-
-        else {
-            $worker->status = $request['status'];
-            $worker->save();
-           return response()->json([
-                'status' => $worker->status
-            ], 200);
-        }
-
     }
 
 }
