@@ -172,35 +172,36 @@ class WorkerController extends Controller
 
     public function set_weight(WeightRequest $request): JsonResponse
     {
+        $data = $request->validated();
         /*
-         * insert row in order's table
-         * id of client by algorithm
+         * update row in order's table
          * weight by request
-         * id of worker by auth
          * points by equation
          * date of order by the current date
-         * consumed_time by algorithm per minutes
          */
-        $worker = auth('worker-api')->user();
 
-        $data = $request->validated();
+        $worker = auth('worker-api')->user();
+        // get order by id of worker.
+        // update date by current date.
+        // update weight.
+        // update points.
+        // save.
+
         $data['order_date'] = date("Y-m-d h-i-s");
         $data['point_earned'] = (int) ($data['weight'] / 3);
-        $data['user_id'] = 4;
-        $data['worker_id'] = $worker->id;
-        $data['consumed_time'] = 300;
         $order = Order::create($data);
+
         // copy the order to Ended_orders table
         // delete this row from order's table.
 
         //  change in the target of worker (my_weight)
-        $this->update_target_of_worker($order->worker_id, $order->weight);
+        //$this->update_target_of_worker($order->worker_id, $order->weight);
 
         // change in weekly target from admin to worker (weight)
         //$this->update_weekly_target_of_admin($this->companyController, $order->worker_id);
 
         // add the new points to user's points
-        $this->update_points_of_user($order->user_id, $order->point_earned);
+        //$this->update_points_of_user($order->user_id, $order->point_earned);
 
         return response()->json([
             'order' => new OrderResource($order),

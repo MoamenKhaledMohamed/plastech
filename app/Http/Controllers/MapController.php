@@ -24,7 +24,7 @@ class MapController extends Controller
         $worker = $this->get_the_nearest_worker($availableWorkers, $latitude, $longitude);
 
         // insert in order's table
-        $this->create_order();
+        $this->create_order($worker);
 
         // return worker's data to user as json.
         return response()->json([]);
@@ -36,14 +36,17 @@ class MapController extends Controller
         return [];
     }
 
-    public function get_the_nearest_worker($availableWorkers, float $latitude, float $longitude)
+    public function get_the_nearest_worker($availableWorkers, float $latitude, float $longitude): string
     {
         // compare locations of available workers to location of user then return this worker.
         // use distance matrix.
+        // add duration and distance to worker's table.
+        // get the nearest worker by less duration or distance.
+        // return this worker.
        return '';
     }
 
-    public function create_order()
+    public function create_order($worker)
     {
         // create order in order's table.
     }
