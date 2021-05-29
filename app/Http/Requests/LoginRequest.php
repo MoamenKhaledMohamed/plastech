@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'email:rfc,dns|required',
+            'email' => 'required',
             'password' => 'required| min:6|regex:"^([a-zA-Z0-9@*#]{8,15})"',
         ];
     }

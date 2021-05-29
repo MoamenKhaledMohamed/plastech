@@ -14,7 +14,9 @@ class UserAuthController extends Controller
 {
     public function register(UserRequest $request): \Illuminate\Http\JsonResponse
     {
+        echo(88888888);
         $credentials = $request->validated();
+        echo(999999999);
         $credentials['password'] = bcrypt($credentials['password']);
 
         $user = User::create($credentials);
@@ -55,3 +57,4 @@ class UserAuthController extends Controller
     }
 
 }
+ 
