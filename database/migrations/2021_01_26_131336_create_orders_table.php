@@ -15,9 +15,9 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('order_date');
-            $table->bigInteger('weight');
-            $table->bigInteger('point_earned');
+            $table->timestamp('order_date')->nullable();
+            $table->bigInteger('weight')->nullable();
+            $table->bigInteger('point_earned')->nullable();
             $table->float('consumed_time')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('worker_id')->constrained();
