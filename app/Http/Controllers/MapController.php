@@ -25,10 +25,10 @@ class MapController extends Controller
         $user = auth('user-api')->user();
 
         // insert latitude and longitude in user's table.
-        $user_DB = User::find($user->id);
-        $user_DB->latitude = $data['latitude'];
-        $user_DB->longitude = $data['longitude'];
-        $user_DB->save();
+        // $user_DB = User::find($user->id);
+        $user->latitude = $data['latitude'];
+        $user->longitude = $data['longitude'];
+        $user->save();
         
         // return 10 available locations of workers. search in table and check on status of worker.
         $availableWorkers = $this->get_available_workers($data['latitude'], $data['longitude']);
@@ -52,14 +52,29 @@ class MapController extends Controller
         // order by  val1
         // limit 10
 
+        // SELECT id,
+        //     3956 * 2 * ASIN(
+        //             SQRT( POWER(SIN(ABS(31.264807 - latitude) * pi()/180 / 2), 2)
+        //                 + COS(30.010371 * pi()/180 ) * COS(latitude * pi()/180)
+        //                         * POWER(SIN(ABS(30.010371 - longitude) * pi()/180 / 2), 2) ))
+        //         AS distance
+        // from workers
+        // order by distance;
+
         // return 10 available locations of workers. search in table and check on status of worker.
-        $workers = Worker::select('id', 'latitude','longitude', DB::raw('sqrt( ( pow(latitude - '.$latitude.', 2) + pow((longitude - '.$longitude.'), 2) ) ) as val1'))
+        // $workers = Worker::select('id', 'latitude','longitude', DB::raw('sqrt( ( pow(latitude - '.$latitude.', 2) + pow((longitude - '.$longitude.'), 2) ) ) as val1'))
+        //     ->where('status', 1)
+        //     ->groupBy('id')
+        //     ->orderBy('val1')
+        //     ->limit(10)
+        //     ->get();
+        $workers = Worker::select('id', 'latitude','longitude', DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(ABS('.$latitude.' - latitude) * pi()/180 / 2), 2) + COS('.$longitude.' * pi()/180 ) * COS(latitude * pi()/180) * POWER(SIN(ABS('.$longitude.' - longitude) * pi()/180 / 2), 2) ))AS distance'))
             ->where('status', 1)
-            ->groupBy('id')
-            ->orderBy('val1')
+            ->orderBy('distance')
             ->limit(10)
             ->get();
 
+        Log::error($workers);
         return $workers;
     }
 
