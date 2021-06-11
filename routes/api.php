@@ -56,7 +56,7 @@ use App\Http\Controllers\ProblemController;
         Route::post('submit-feedback', [WorkerController::class, 'set_rate']); // no relation between user and worker(user rates a worker)
 
         //7#### MyLocation####
-        Route::post('my-order', [MapController::class, 'get_order']);
+        Route::post('get-order', [MapController::class, 'get_order']);
     });
 
 // --------------------------Worker--------------------------------------
