@@ -8,9 +8,12 @@ use App\Http\Resources\WorkerResource;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Worker;
+use App\Models\EndedOrder;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\WorkerRequest;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class WorkerController extends Controller
 {
@@ -186,25 +189,42 @@ class WorkerController extends Controller
         // update weight.
         // update points.
         // save.
+        
+        $order = Order::select('*')->where('worker_id', $worker['id'])->first();
+        
+        $order->order_date = date("Y-m-d h-i-s");
+        $order->weight = $data['weight'];
+        $order->point_earned = (int) ($data['weight'] / 3);
+        // $order->save();
 
-        $data['order_date'] = date("Y-m-d h-i-s");
-        $data['point_earned'] = (int) ($data['weight'] / 3);
-        $order = Order::create($data);
-
+        $endedOrderdata;
+        $endedOrderdata['order_date'] = $order->order_date;
+        $endedOrderdata['weight'] = $order->weight;
+        $endedOrderdata['point_earned'] = $order->point_earned;
+        $endedOrderdata['consumed_time'] = $order->consumed_time;
+        $endedOrderdata['user_id'] = $order->user_id;
+        $endedOrderdata['worker_id'] = $order->worker_id;
+        $endedOrderdata['is_ended'] = true;
+        $endedOrderdata['created_at'] = $order->created_at;
+        $endedOrderdata['updated_at'] = $order->updated_at;
         // copy the order to Ended_orders table
-        // delete this row from order's table.
-
+        $row = EndedOrder::create($endedOrderdata);
+        
         //  change in the target of worker (my_weight)
-        //$this->update_target_of_worker($order->worker_id, $order->weight);
+        // $this->update_target_of_worker($order->worker_id, $order->weight);
 
         // change in weekly target from admin to worker (weight)
-        //$this->update_weekly_target_of_admin($this->companyController, $order->worker_id);
+        // $this->update_weekly_target_of_admin($this->companyController, $order->worker_id);
 
         // add the new points to user's points
         //$this->update_points_of_user($order->user_id, $order->point_earned);
 
+        
+        // delete this row from order's table.
+        $order->delete();
+
         return response()->json([
-            'order' => new OrderResource($order),
+            'ended order' => new OrderResource($row),
         ], 201);
     }
 

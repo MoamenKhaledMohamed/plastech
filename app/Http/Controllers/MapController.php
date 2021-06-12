@@ -45,13 +45,6 @@ class MapController extends Controller
 
     public function get_available_workers(float $latitude, float $longitude)
     {
-        // query to retrieve nerest 10 workers to the user   
-        // select id, sqrt( ( pow(latitude - 2, 2) + pow((longitude - 2), 2) ) ) as val1
-        // from workers
-        // group by id
-        // order by  val1
-        // limit 10
-
         // SELECT id,
         //     3956 * 2 * ASIN(
         //             SQRT( POWER(SIN(ABS(31.264807 - latitude) * pi()/180 / 2), 2)
