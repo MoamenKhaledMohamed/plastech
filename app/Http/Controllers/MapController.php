@@ -29,7 +29,7 @@ class MapController extends Controller
         $user->latitude = $data['latitude'];
         $user->longitude = $data['longitude'];
         $user->save();
-        
+
         // return 10 available locations of workers. search in table and check on status of worker.
         $availableWorkers = $this->get_available_workers($data['latitude'], $data['longitude']);
         // return nearst one
@@ -45,29 +45,13 @@ class MapController extends Controller
 
     public function get_available_workers(float $latitude, float $longitude)
     {
-        // query to retrieve nerest 10 workers to the user   
+        // query to retrieve nerest 10 workers to the user
         // select id, sqrt( ( pow(latitude - 2, 2) + pow((longitude - 2), 2) ) ) as val1
         // from workers
         // group by id
         // order by  val1
         // limit 10
 
-        // SELECT id,
-        //     3956 * 2 * ASIN(
-        //             SQRT( POWER(SIN(ABS(31.264807 - latitude) * pi()/180 / 2), 2)
-        //                 + COS(30.010371 * pi()/180 ) * COS(latitude * pi()/180)
-        //                         * POWER(SIN(ABS(30.010371 - longitude) * pi()/180 / 2), 2) ))
-        //         AS distance
-        // from workers
-        // order by distance;
-
-        // return 10 available locations of workers. search in table and check on status of worker.
-        // $workers = Worker::select('id', 'latitude','longitude', DB::raw('sqrt( ( pow(latitude - '.$latitude.', 2) + pow((longitude - '.$longitude.'), 2) ) ) as val1'))
-        //     ->where('status', 1)
-        //     ->groupBy('id')
-        //     ->orderBy('val1')
-        //     ->limit(10)
-        //     ->get();
         $workers = Worker::select('id', 'latitude','longitude', DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(ABS('.$latitude.' - latitude) * pi()/180 / 2), 2) + COS('.$longitude.' * pi()/180 ) * COS(latitude * pi()/180) * POWER(SIN(ABS('.$longitude.' - longitude) * pi()/180 / 2), 2) ))AS distance'))
             ->where('status', 1)
             ->orderBy('distance')
@@ -91,7 +75,7 @@ class MapController extends Controller
         $destinations = $latitude . ',' . $longitude;
         $nearestWorker;
 
-        for ($i=0; $i < count($availableWorkers); $i++) { 
+        for ($i=0; $i < count($availableWorkers); $i++) {
             // $heading = '31.272793,30.006345';
             $heading = $availableWorkers[$i]['latitude'] . ',' . $availableWorkers[$i]['longitude'];
             $response = Http::get($url . 'heading=90:' . $heading . '&destinations=' . $destinations . '&key=' . $key);
@@ -118,7 +102,7 @@ class MapController extends Controller
         $worker_DB = Worker::find($nearestWorker['id']);
         $worker_DB->duration_in_seconds = $nearestWorker['durationValue'];
         $worker_DB->distance_in_meters = $nearestWorker['distanceValue'];
-        $worker_DB->save();      
+        $worker_DB->save();
 
         // return this worker.
         return $worker_DB;
