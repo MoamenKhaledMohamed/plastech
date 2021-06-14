@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->date('date_of_birth');
             $table->string('government');
             $table->bigInteger('number_of_points')->nullable();
-            $table->float("latitude")->nullable();
-            $table->float("longitude")->nullable();
+            $table->float("latitude")->default(39);
+            $table->float("longitude")->default(-122.47);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class MapController extends Controller
 
         // return 10 available locations of workers. search in table and check on status of worker.
         $availableWorkers = $this->get_available_workers($data['latitude'], $data['longitude']);
-        dd($availableWorkers);
+
         // return the nearest worker
         $nearestWorker = $this->get_the_nearest_worker($availableWorkers, $data['latitude'], $data['longitude']);
 
@@ -56,46 +56,53 @@ class MapController extends Controller
 
     public function get_the_nearest_worker($availableWorkers, $latitude, $longitude)
     {
+       $url ='https://maps.googleapis.com/maps/api/distancematrix/json?';
 
-        $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
-        $key = 'AIzaSyAPaKpXjMyHW7g55YVj--jtOvrwLIVrUUs';
+       // create the query that will be used in the request
+       $query['origins'] = '';
+       foreach( $availableWorkers as $availableWorker) {
+            $query['origins'] .= $availableWorker->latitude;
+            $query['origins'] .= ',';
+            $query['origins'] .= $availableWorker->longitude;
+            $query['origins'] .= '|';
+       }
+       if($query['origins'][-1] === '|')
+           $query['origins'] = substr($query['origins'], 0, -1);
 
-        $destinations = $latitude . ',' . $longitude;
-        $nearestWorker = null;
 
-        for ($i = 0; $i < count($availableWorkers); $i++) {
+       $query['destinations'] = $latitude . ',' . $longitude;
+       $query['key'] = 'AIzaSyAPaKpXjMyHW7g55YVj--jtOvrwLIVrUUs';
 
-            $heading = $availableWorkers[$i]['latitude'] . ',' . $availableWorkers[$i]['longitude'];
-            $response = Http::get($url . 'heading=90:' . $heading . '&destinations=' . $destinations . '&key=' . $key);
+       // create the request
+        $response = Http::get($url, $query);
 
-            // get the nearest worker by less duration.
-            if ($response['rows'][0]['elements'][0]) {
-                if ($i == 0) {
-                    $nearestWorker = $availableWorkers[$i];
-                    dd($response);
-                    dd($response['rows'][0]['elements'][0]['duration']['value']);
-                    $nearestWorker['durationValue'] = $response['rows'][0]['elements'][0]['duration']['value'];
-                    $nearestWorker['distanceValue'] = $response['rows'][0]['elements'][0]['distance']['value'];
-                } else {
-                    if ($nearestWorker['durationValue'] > $response['rows'][0]['elements'][0]['duration']['value']) {
-                        $nearestWorker = $availableWorkers[$i];
-                        $nearestWorker['durationValue'] = $response['rows'][0]['elements'][0]['duration']['value'];
-                        $nearestWorker['distanceValue'] = $response['rows'][0]['elements'][0]['distance']['value'];
-                    }
-                }
-                $availableWorkers[$i]['distance'] = $response['rows'][0]['elements'][0]['distance']['text'];
-                $availableWorkers[$i]['duration'] = $response['rows'][0]['elements'][0]['duration']['text'];
-            }
+        // get duration and distance for each worker
+        $finalAvailableWorkers = [];
+        for($index = 0; $index < count($response['rows']); $index++){
+           $row =  $response['rows'][$index];
+            foreach ($row['elements'] as $element) {
+              switch ($element['status']){
+                  case 'OK':
+                      $avWorker = $availableWorkers[$index];
+                      $avWorker['duration_in_seconds'] = $element['duration']['value'];
+                      $avWorker['distance_in_meters'] = $element['distance']['value'];
+                      $avWorker->save();
+                      array_push($finalAvailableWorkers, $avWorker);
+                      break;
+
+              }
+           }
         }
 
-        // add duration and distance to worker's table.
-        $worker_DB = Worker::find($nearestWorker['id']);
-        $worker_DB->duration_in_seconds = $nearestWorker['durationValue'];
-        $worker_DB->distance_in_meters = $nearestWorker['distanceValue'];
-        $worker_DB->save();
+        // sort available workers by duration
+        usort($finalAvailableWorkers, function ($obj1, $obj2){
+            return strcmp($obj1->duration_in_seconds, $obj2->duration_in_seconds);
 
-        // return this worker.
-        return $worker_DB;
+        });
+
+
+        // return the nearest worker after sort the array of workers
+        return $finalAvailableWorkers[0];
     }
 
     public function create_order($userId, $workerId)
