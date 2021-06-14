@@ -24,7 +24,7 @@ class OrderFactory extends Factory
         return [
             'order_date'=>$this->faker->dateTime,
             'weight'=>$this->faker->numberBetween(1,1000),
-            'point_earned'=>$this->faker->numberBetween(50,10000),
+            'earned_points'=>$this->faker->numberBetween(50,10000),
         ];
     }
 }

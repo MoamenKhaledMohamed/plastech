@@ -5,6 +5,7 @@ use App\Http\Requests\RateRequest;
 use App\Http\Requests\WeightRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\WorkerResource;
+use App\Models\EndedOrder;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Worker;
@@ -173,47 +174,43 @@ class WorkerController extends Controller
     public function set_weight(WeightRequest $request): JsonResponse
     {
         $data = $request->validated();
-        /*
-         * update row in order's table
-         * weight by request
-         * points by equation
-         * date of order by the current date
-         */
 
         $worker = auth('worker-api')->user();
-        // get order by id of worker.
-        // update date by current date.
-        // update weight.
-        // update points.
-        // save.
+        $myOrder = $worker->order;
 
+        // complete order's data and put it in ended_order table
+        $data['user_id'] = $myOrder['user_id'];
+        $data['worker-id'] = $worker->id;
         $data['order_date'] = date("Y-m-d h-i-s");
-        $data['point_earned'] = (int) ($data['weight'] / 3);
-        $order = Order::create($data);
+        $data['earned_points'] = (int) ($data['weight'] / 3);
 
-        // copy the order to Ended_orders table
-        // delete this row from order's table.
+        $endedOrder = EndedOrder::create($data);
+
+        $myOrder->delete();
 
         //  change in the target of worker (my_weight)
-        //$this->update_target_of_worker($order->worker_id, $order->weight);
+        $this->update_target_of_worker($worker, $data['weight']);
 
         // change in weekly target from admin to worker (weight)
-        //$this->update_weekly_target_of_admin($this->companyController, $order->worker_id);
+        $this->update_weekly_target_of_admin($this->companyController, $data['worker-id']);
 
         // add the new points to user's points
-        //$this->update_points_of_user($order->user_id, $order->point_earned);
+        $this->update_points_of_user($data['user_id'], $data['earned_points']);
 
         return response()->json([
-            'order' => new OrderResource($order),
+            'order' => new OrderResource($endedOrder),
         ], 201);
     }
 
-    public function update_target_of_worker($id, $weight)
+    public function update_target_of_worker($worker, $weight)
     {
-        $worker = Worker::find($id);
-//        $worker->my_weight = (carbon::now() > $worker->end_at) ? $weight : $worker->my_weight + $weight;
-        $worker->my_weight += $weight;
+        $worker->my_weight = (carbon::now() > $worker->end_at) ? $weight : $worker->my_weight + $weight;
         $worker->save();
+    }
+
+    public function update_weekly_target_of_admin(CompanyController $companyController, $id)
+    {
+        $companyController->get_salary($id);
     }
 
     public function update_points_of_user($id, $pointEarned)
@@ -221,11 +218,6 @@ class WorkerController extends Controller
         $user = User::find($id);
         $user->number_of_points += $pointEarned;
         $user->save();
-    }
-
-    public function update_weekly_target_of_admin(CompanyController $companyController, $id)
-    {
-        $companyController->get_salary($id);
     }
 }
 

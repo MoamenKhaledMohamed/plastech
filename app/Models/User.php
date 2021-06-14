@@ -21,6 +21,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+    public function ended_orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EndedOrder::class);
+    }
 
     public function problems(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

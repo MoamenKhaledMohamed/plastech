@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\LocationRequest as LocationRequest;
-use App\Http\Controllers\OrderController as OrderController;
 use Illuminate\Http\JsonResponse;
-use App\Models\User;
 use App\Models\Worker;
 use App\Models\Order;
-use App\Http\Resources\WorkerResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -15,25 +12,24 @@ use Illuminate\Support\Facades\Log;
 class MapController extends Controller
 {
     private $mapController;
+
     // User Part
-
-
     public function get_order(LocationRequest $request): JsonResponse
     {
         // validation latitude and longitude.
         $data = $request->validated();
-        $user = auth('user-api')->user();
 
-        // insert latitude and longitude in user's table.
-        // $user_DB = User::find($user->id);
+        $user = auth('user-api')->user();
         $user->latitude = $data['latitude'];
         $user->longitude = $data['longitude'];
         $user->save();
 
         // return 10 available locations of workers. search in table and check on status of worker.
         $availableWorkers = $this->get_available_workers($data['latitude'], $data['longitude']);
-        // return nearst one
+        dd($availableWorkers);
+        // return the nearest worker
         $nearestWorker = $this->get_the_nearest_worker($availableWorkers, $data['latitude'], $data['longitude']);
+
         // insert in order's table
         $this->create_order($user->id, $nearestWorker->id);
 
@@ -45,14 +41,10 @@ class MapController extends Controller
 
     public function get_available_workers(float $latitude, float $longitude)
     {
-        // query to retrieve nerest 10 workers to the user
-        // select id, sqrt( ( pow(latitude - 2, 2) + pow((longitude - 2), 2) ) ) as val1
-        // from workers
-        // group by id
-        // order by  val1
-        // limit 10
+        // query to retrieve nearest 10 workers to the user
 
-        $workers = Worker::select('id', 'latitude','longitude', DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(ABS('.$latitude.' - latitude) * pi()/180 / 2), 2) + COS('.$longitude.' * pi()/180 ) * COS(latitude * pi()/180) * POWER(SIN(ABS('.$longitude.' - longitude) * pi()/180 / 2), 2) ))AS distance'))
+        $workers = Worker::select('id', 'latitude','longitude',
+            DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(ABS('.$latitude.' - latitude) * pi()/180 / 2), 2) + COS('.$longitude.' * pi()/180 ) * COS(latitude * pi()/180) * POWER(SIN(ABS('.$longitude.' - longitude) * pi()/180 / 2), 2) ))AS distance'))
             ->where('status', 1)
             ->orderBy('distance')
             ->limit(10)
@@ -64,19 +56,15 @@ class MapController extends Controller
 
     public function get_the_nearest_worker($availableWorkers, $latitude, $longitude)
     {
-        // compare locations of available workers to location of user then return this worker.
-        // use distance matrix.
 
-
-        Log::error("tessssssssssssssssssssssssssssstes");
         $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
         $key = 'AIzaSyAPaKpXjMyHW7g55YVj--jtOvrwLIVrUUs';
-        // $destinations = '31.264807,30.010371';
-        $destinations = $latitude . ',' . $longitude;
-        $nearestWorker;
 
-        for ($i=0; $i < count($availableWorkers); $i++) {
-            // $heading = '31.272793,30.006345';
+        $destinations = $latitude . ',' . $longitude;
+        $nearestWorker = null;
+
+        for ($i = 0; $i < count($availableWorkers); $i++) {
+
             $heading = $availableWorkers[$i]['latitude'] . ',' . $availableWorkers[$i]['longitude'];
             $response = Http::get($url . 'heading=90:' . $heading . '&destinations=' . $destinations . '&key=' . $key);
 
@@ -84,6 +72,8 @@ class MapController extends Controller
             if ($response['rows'][0]['elements'][0]) {
                 if ($i == 0) {
                     $nearestWorker = $availableWorkers[$i];
+                    dd($response);
+                    dd($response['rows'][0]['elements'][0]['duration']['value']);
                     $nearestWorker['durationValue'] = $response['rows'][0]['elements'][0]['duration']['value'];
                     $nearestWorker['distanceValue'] = $response['rows'][0]['elements'][0]['distance']['value'];
                 } else {
@@ -111,17 +101,12 @@ class MapController extends Controller
     public function create_order($userId, $workerId)
     {
         // create order in order's table.
-        $data;
         $data['user_id'] = $userId;
         $data['worker_id'] = $workerId;
-        $row = Order::create($data);
+        Order::create($data);
     }
 
     // Worker Part
-
-    /**
-     */
-
     public function change_my_location (LocationRequest $request){
         //check validate and then store longitude, latitude and status of current worker
         $request->validated();
