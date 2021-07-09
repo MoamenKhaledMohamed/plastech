@@ -27,6 +27,12 @@ class CreateWorkersTable extends Migration
             $table->float("rating")->nullable();
             $table->integer("raters")->nullable();
             $table->float("my_weight")->nullable();
+            $table->float("latitude")->default(37.77);
+            $table->float("longitude")->default(-122.47);
+            $table->integer("duration_in_seconds")->nullable();
+            $table->float("distance_in_meters")->nullable();
+            $table->boolean("status")->default(true);
+            $table->date("time_changing_status")->nullable();
             $table->date("start_at")->nullable();
             $table->date("end_at")->nullable();
             $table->rememberToken();

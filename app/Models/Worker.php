@@ -27,5 +27,8 @@ class Worker extends Authenticatable
     {
         return $this->hasOne(Order::class);
     }
-
+    public function ended_orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EndedOrder::class);
+    }
 }

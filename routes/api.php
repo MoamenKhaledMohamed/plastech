@@ -6,12 +6,12 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Auth\WorkerAuthController;
 use App\Http\Controllers\PaypalController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProblemController;
-
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Types Of API Routes
@@ -55,6 +55,8 @@ use App\Http\Controllers\ProblemController;
         //6#### Feedback ####
         Route::post('submit-feedback', [WorkerController::class, 'set_rate']); // no relation between user and worker(user rates a worker)
 
+        //7#### Get Order####
+        Route::post('get-order', [MapController::class, 'get_order']);
     });
 
     //7#### Payment #####
@@ -80,6 +82,11 @@ use App\Http\Controllers\ProblemController;
 
         //3#### weight ####
         Route::post('worker/submit-weight', [WorkerController::class, 'set_weight']);
+
+        //4#### MyOrder####
+        Route::post('my-order', [OrderController::class, 'search_for_my_order']);
+
+        Route::post('my-location', [MapController::class, 'change_my_location']);
     });
 // --------------------------Company--------------------------------------
 

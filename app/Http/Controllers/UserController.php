@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
 
-   public function prize(): JsonResponse
+    public function prize(): JsonResponse
    {
        $user = auth('user-api')->user();
        $myPoints = $user->number_of_points;
@@ -31,13 +31,6 @@ class UserController extends Controller
         ], 404);
    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UserRequest $request
-     * @param $id
-     * @return JsonResponse
-     */
     public function update(UserRequest $request): JsonResponse
     {
         $updatedUser = $request->validated();

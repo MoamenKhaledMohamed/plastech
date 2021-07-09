@@ -32,6 +32,8 @@ class UserFactory extends Factory
             'date_of_birth'=>$this->faker->dateTime,
            'government'=>$this->faker->country,
             'number_of_points'=>$this->faker->numberBetween(1000,50000),
+//            'latitude' => $this->faker->numberBetween(0,180),
+//            'longitude' => $this->faker->numberBetween(0,360),
         ];
     }
 }
