@@ -4,14 +4,14 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Auth\WorkerAuthController;
-use App\Http\Controllers\MapController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaypalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProblemController;
-
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Types Of API Routes
@@ -58,6 +58,13 @@ use App\Http\Controllers\ProblemController;
         //7#### Get Order####
         Route::post('get-order', [MapController::class, 'get_order']);
     });
+
+    //7#### Payment #####
+    Route::post('checkout', [PaypalController::class, 'checkout']);
+
+    Route::get('status', [PaypalController::class, 'status']);
+
+    Route::get('cancelled', [PaypalController::class, 'cancelled']);
 
 // --------------------------Worker--------------------------------------
 
